@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Winnie - AI 产品实习生 | 数字面试分身</title>
   <style>
+    /* 样式与之前完全相同，为节省篇幅省略，但你的项目里必须保留完整样式 */
     :root {
       --primary-color: #2563eb;
       --primary-light: #3b82f6;
@@ -15,485 +16,126 @@
       --text-secondary: #94a3b8;
       --border-color: rgba(255, 255, 255, 0.1);
     }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
       background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
       min-height: 100vh;
     }
-
-    .container {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-    }
-
-    @media (min-width: 1024px) {
-      .container {
-        flex-direction: row;
-      }
-    }
-
-    .sidebar {
-      width: 100%;
-      max-width: 320px;
-      padding: 24px;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    @media (min-width: 1024px) {
-      .sidebar {
-        border-right: 1px solid var(--border-color);
-        border-bottom: none;
-      }
-    }
-
+    .container { display:flex; flex-direction:column; height:100vh; }
+    @media (min-width:1024px) { .container { flex-direction:row; } }
+    .sidebar { width:100%; max-width:320px; padding:24px; border-bottom:1px solid var(--border-color); }
+    @media (min-width:1024px) { .sidebar { border-right:1px solid var(--border-color); border-bottom:none; } }
     .profile-card {
       background: var(--bg-card);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255,255,255,0.08);
       border-radius: 16px;
       padding: 24px;
       text-align: center;
     }
-
     .avatar {
-      width: 80px;
-      height: 80px;
-      margin: 0 auto 16px;
-      border-radius: 50%;
+      width:80px; height:80px; margin:0 auto 16px; border-radius:50%;
       background: linear-gradient(135deg, #3b82f6, #06b6d4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 32px;
-      color: white;
-      animation: float 6s ease-in-out infinite;
+      display:flex; align-items:center; justify-content:center;
+      font-size:32px; color:white; animation:float 6s ease-in-out infinite;
     }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-8px); }
-    }
-
-    .profile-name {
-      font-size: 20px;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 4px;
-    }
-
-    .profile-alias {
-      font-size: 14px;
-      color: var(--text-secondary);
-      margin-bottom: 16px;
-    }
-
+    @keyframes float { 0%,100%{transform:translateY(0px)} 50%{transform:translateY(-8px)} }
+    .profile-name { font-size:20px; font-weight:600; color:var(--text-primary); margin-bottom:4px; }
+    .profile-alias { font-size:14px; color:var(--text-secondary); margin-bottom:16px; }
     .profile-badge {
-      display: inline-block;
-      padding: 6px 14px;
-      background: rgba(37, 99, 235, 0.15);
-      border: 1px solid rgba(37, 99, 235, 0.3);
-      border-radius: 20px;
-      font-size: 12px;
-      color: #60a5fa;
-      margin-bottom: 20px;
+      display:inline-block; padding:6px 14px;
+      background:rgba(37,99,235,0.15); border:1px solid rgba(37,99,235,0.3);
+      border-radius:20px; font-size:12px; color:#60a5fa; margin-bottom:20px;
     }
-
-    .profile-info {
-      text-align: left;
-    }
-
-    .info-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .info-item:last-child {
-      border-bottom: none;
-    }
-
-    .info-icon {
-      width: 24px;
-      height: 24px;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.08);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #60a5fa;
-      font-size: 12px;
-    }
-
-    .info-content {
-      flex: 1;
-    }
-
-    .info-label {
-      font-size: 11px;
-      color: var(--text-secondary);
-      margin-bottom: 2px;
-    }
-
-    .info-value {
-      font-size: 13px;
-      color: var(--text-primary);
-    }
-
-    .link-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
+    .profile-info { text-align:left; }
+    .info-item { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.05); }
+    .info-item:last-child { border-bottom:none; }
+    .info-icon { width:24px; height:24px; border-radius:8px; background:rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center; color:#60a5fa; font-size:12px; }
+    .info-content { flex:1; }
+    .info-label { font-size:11px; color:var(--text-secondary); margin-bottom:2px; }
+    .info-value { font-size:13px; color:var(--text-primary); }
+    .link-buttons { display:flex; flex-direction:column; gap:10px; margin-top:20px; }
     .link-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 12px;
-      border-radius: 10px;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 500;
-      transition: all 0.3s ease;
+      display:flex; align-items:center; justify-content:center; gap:8px; padding:12px;
+      border-radius:10px; text-decoration:none; font-size:14px; font-weight:500; transition:all 0.3s ease;
     }
-
     .link-btn-primary {
-      background: rgba(59, 130, 246, 0.15);
-      border: 1px solid rgba(59, 130, 246, 0.3);
-      color: #60a5fa;
+      background:rgba(59,130,246,0.15); border:1px solid rgba(59,130,246,0.3); color:#60a5fa;
     }
-
     .link-btn-primary:hover {
-      background: rgba(59, 130, 246, 0.25);
-      border-color: rgba(59, 130, 246, 0.5);
-      color: #93bbfc;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+      background:rgba(59,130,246,0.25); border-color:rgba(59,130,246,0.5); color:#93bbfc;
+      transform:translateY(-2px); box-shadow:0 4px 12px rgba(59,130,246,0.15);
     }
-
     .link-btn-secondary {
-      background: rgba(59, 130, 246, 0.08);
-      border: 1px solid rgba(59, 130, 246, 0.2);
-      color: #60a5fa;
+      background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.2); color:#60a5fa;
     }
-
     .link-btn-secondary:hover {
-      background: rgba(59, 130, 246, 0.18);
-      border-color: rgba(59, 130, 246, 0.4);
-      color: #93bbfc;
-      transform: translateY(-2px);
+      background:rgba(59,130,246,0.18); border-color:rgba(59,130,246,0.4); color:#93bbfc;
+      transform:translateY(-2px);
     }
-
     .link-btn-feedback {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: #94a3b8;
-      font-size: 13px;
+      background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); color:#94a3b8; font-size:13px;
     }
-
     .link-btn-feedback:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.2);
-      color: #f1f5f9;
-      transform: translateY(-2px);
+      background:rgba(255,255,255,0.1); border-color:rgba(255,255,255,0.2); color:#f1f5f9;
+      transform:translateY(-2px);
     }
-
-    .link-external-icon {
-      font-size: 12px;
-      opacity: 0.6;
-      margin-left: 2px;
-    }
-
-    .chat-area {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      min-height: 0;
-    }
-
-    .chat-header {
-      padding: 20px 24px;
-      border-bottom: 1px solid var(--border-color);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .chat-header-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .chat-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #3b82f6, #06b6d4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      color: white;
-    }
-
-    .chat-title {
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-
-    .chat-status {
-      font-size: 12px;
-      color: #22c55e;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #22c55e;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-
-    .chat-messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .scrollbar-thin::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .scrollbar-thin::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    .scrollbar-thin::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 3px;
-    }
-
-    .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-      background: rgba(255, 255, 255, 0.3);
-    }
-
-    .message-wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .message {
-      display: flex;
-      gap: 12px;
-    }
-
-    .message-user {
-      flex-direction: row-reverse;
-    }
-
-    .message-avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      color: white;
-    }
-
-    .message-avatar-ai {
-      background: linear-gradient(135deg, #3b82f6, #06b6d4);
-    }
-
-    .message-avatar-user {
-      background: rgba(255, 255, 255, 0.15);
-    }
-
-    .message-bubble {
-      max-width: 70%;
-      padding: 12px 16px;
-      border-radius: 18px;
-      font-size: 14px;
-      line-height: 1.6;
-      word-wrap: break-word;
-    }
-
-    .message-bubble-ai {
-      background: var(--bg-card);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: var(--text-primary);
-      border-bottom-left-radius: 4px;
-    }
-
-    .message-bubble-user {
-      background: linear-gradient(135deg, #2563eb, #1d4ed8);
-      color: white;
-      border-bottom-right-radius: 4px;
-    }
-
-    .quick-replies {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 8px;
-      margin-left: 48px;
-    }
-
+    .link-external-icon { font-size:12px; opacity:0.6; margin-left:2px; }
+    .chat-area { flex:1; display:flex; flex-direction:column; min-height:0; }
+    .chat-header { padding:20px 24px; border-bottom:1px solid var(--border-color); display:flex; align-items:center; justify-content:space-between; }
+    .chat-header-left { display:flex; align-items:center; gap:12px; }
+    .chat-avatar { width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg, #3b82f6, #06b6d4); display:flex; align-items:center; justify-content:center; font-size:16px; color:white; }
+    .chat-title { font-size:16px; font-weight:600; color:var(--text-primary); }
+    .chat-status { font-size:12px; color:#22c55e; display:flex; align-items:center; gap:6px; }
+    .status-dot { width:8px; height:8px; border-radius:50%; background:#22c55e; animation:pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+    .chat-messages { flex:1; overflow-y:auto; padding:24px; display:flex; flex-direction:column; gap:16px; }
+    .scrollbar-thin::-webkit-scrollbar { width:6px; }
+    .scrollbar-thin::-webkit-scrollbar-track { background:rgba(255,255,255,0.05); }
+    .scrollbar-thin::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.2); border-radius:3px; }
+    .scrollbar-thin::-webkit-scrollbar-thumb:hover { background:rgba(255,255,255,0.3); }
+    .message-wrapper { display:flex; flex-direction:column; gap:8px; }
+    .message { display:flex; gap:12px; }
+    .message-user { flex-direction:row-reverse; }
+    .message-avatar { width:36px; height:36px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:14px; color:white; }
+    .message-avatar-ai { background:linear-gradient(135deg, #3b82f6, #06b6d4); }
+    .message-avatar-user { background:rgba(255,255,255,0.15); }
+    .message-bubble { max-width:70%; padding:12px 16px; border-radius:18px; font-size:14px; line-height:1.6; word-wrap:break-word; }
+    .message-bubble-ai { background:var(--bg-card); border:1px solid rgba(255,255,255,0.08); color:var(--text-primary); border-bottom-left-radius:4px; }
+    .message-bubble-user { background:linear-gradient(135deg, #2563eb, #1d4ed8); color:white; border-bottom-right-radius:4px; }
+    .quick-replies { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; margin-left:48px; }
     .quick-reply-btn {
-      background: rgba(59, 130, 246, 0.12);
-      border: 1px solid rgba(59, 130, 246, 0.25);
-      border-radius: 20px;
-      padding: 6px 16px;
-      color: #60a5fa;
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-family: inherit;
+      background:rgba(59,130,246,0.12); border:1px solid rgba(59,130,246,0.25); border-radius:20px;
+      padding:6px 16px; color:#60a5fa; font-size:13px; cursor:pointer; transition:all 0.3s ease; font-family:inherit;
     }
-
-    .quick-reply-btn:hover {
-      background: rgba(59, 130, 246, 0.25);
-      border-color: rgba(59, 130, 246, 0.5);
-      transform: translateY(-1px);
-    }
-
-    .typing-indicator {
-      display: flex;
-      gap: 4px;
-      padding: 12px 16px;
-    }
-
-    .typing-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--text-secondary);
-      animation: typing 1.4s infinite ease-in-out both;
-    }
-
-    .typing-dot:nth-child(1) { animation-delay: -0.32s; }
-    .typing-dot:nth-child(2) { animation-delay: -0.16s; }
-
-    @keyframes typing {
-      0%, 80%, 100% { transform: scale(0); }
-      40% { transform: scale(1); }
-    }
-
-    .chat-input-area {
-      padding: 20px 24px;
-      border-top: 1px solid var(--border-color);
-      background: rgba(15, 23, 42, 0.95);
-    }
-
-    .input-wrapper {
-      display: flex;
-      gap: 12px;
-      align-items: flex-end;
-    }
-
+    .quick-reply-btn:hover { background:rgba(59,130,246,0.25); border-color:rgba(59,130,246,0.5); transform:translateY(-1px); }
+    .typing-indicator { display:flex; gap:4px; padding:12px 16px; }
+    .typing-dot { width:8px; height:8px; border-radius:50%; background:var(--text-secondary); animation:typing 1.4s infinite ease-in-out both; }
+    .typing-dot:nth-child(1) { animation-delay:-0.32s; }
+    .typing-dot:nth-child(2) { animation-delay:-0.16s; }
+    @keyframes typing { 0%,80%,100%{transform:scale(0)} 40%{transform:scale(1)} }
+    .chat-input-area { padding:20px 24px; border-top:1px solid var(--border-color); background:rgba(15,23,42,0.95); }
+    .input-wrapper { display:flex; gap:12px; align-items:flex-end; }
     .input-field {
-      flex: 1;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      padding: 12px 16px;
-      color: var(--text-primary);
-      font-size: 14px;
-      outline: none;
-      resize: none;
-      min-height: 44px;
-      max-height: 120px;
-      line-height: 1.5;
+      flex:1; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:12px;
+      padding:12px 16px; color:var(--text-primary); font-size:14px; outline:none; resize:none;
+      min-height:44px; max-height:120px; line-height:1.5;
     }
-
-    .input-field:focus {
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-    }
-
-    .input-field::placeholder {
-      color: #64748b;
-    }
-
+    .input-field:focus { border-color:#3b82f6; box-shadow:0 0 0 3px rgba(37,99,235,0.1); }
+    .input-field::placeholder { color:#64748b; }
     .send-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #2563eb, #06b6d4);
-      border: none;
-      color: white;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      transition: all 0.3s ease;
-      flex-shrink: 0;
+      width:44px; height:44px; border-radius:12px; background:linear-gradient(135deg, #2563eb, #06b6d4);
+      border:none; color:white; cursor:pointer; display:flex; align-items:center; justify-content:center;
+      font-size:16px; transition:all 0.3s ease; flex-shrink:0;
     }
-
-    .send-btn:hover:not(:disabled) {
-      background: linear-gradient(135deg, #3b82f6, #22d3ee);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-    }
-
-    .send-btn:active:not(:disabled) {
-      transform: translateY(0);
-    }
-
-    .send-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .system-badge {
-      text-align: center;
-      padding: 8px 16px;
-      margin-bottom: 16px;
-    }
-
-    .system-badge span {
-      font-size: 12px;
-      color: var(--text-secondary);
-      background: rgba(255, 255, 255, 0.05);
-      padding: 4px 12px;
-      border-radius: 12px;
-    }
-
-    .divider {
-      margin-top: 16px;
-      padding-top: 16px;
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
-    }
+    .send-btn:hover:not(:disabled) { background:linear-gradient(135deg, #3b82f6, #22d3ee); transform:translateY(-2px); box-shadow:0 4px 12px rgba(37,99,235,0.3); }
+    .send-btn:active:not(:disabled) { transform:translateY(0); }
+    .send-btn:disabled { opacity:0.5; cursor:not-allowed; }
+    .system-badge { text-align:center; padding:8px 16px; margin-bottom:16px; }
+    .system-badge span { font-size:12px; color:var(--text-secondary); background:rgba(255,255,255,0.05); padding:4px 12px; border-radius:12px; }
+    .divider { margin-top:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.06); }
   </style>
 </head>
 <body>
@@ -548,56 +190,37 @@ const KNOWLEDGE_BASE = {
   email: "32203783@qq.com",
   portfolioUrl: "https://chocolatewin.github.io/my-website/",
   miniProgramUrl: "https://chocolatewin.github.io/PM-Portfolio/",
-  fallbackWeak: "这块我暂时没有准备到具体的案例，不过我在相关经历里做过类似的事。我们刚才在聊「{topic}」方面，您是想继续这个话题，还是换个方向？\n\n直接告诉我您想了解的具体方向 👇",
+  fallbackWeak: "这块我暂时没准备到具体案例，不过我在相关经历里做过类似的事。咱们可以继续聊聊您感兴趣的方向，比如实习、项目或 AI 理解。",
   fallbackHard: "这个问题我的简历里没有展开，欢迎联系我细聊，手机/微信 19298915379。"
 };
 
 // ============================================================
-// 第二部分：同义词映射（扩充）
-// ============================================================
-const SYN_MAP = {
-  self_intro: ["介绍自己","说说你","简单自我介绍","你是谁","你好","hi","hello","您好","讲讲你自己","个人介绍"],
-  internship: ["实习经历","在哪实习","实习收获","几段实习","工作过","做过什么工作","你的经历","有什么经历","做过哪些"],
-  project: ["项目","作品","小程序","做过什么","代表作","亮点","核心项目","输出第一","阅读记录","作品集"],
-  tech: ["技术","编程","代码","开发","全栈","前端","后端","技术栈","用什么","怎么实现","怎么做的","技术怎么实现的","技术细节","开发流程"],
-  ai: ["大模型","AI","RAG","微调","Prompt","思维链","CoT","EEAT","评测","模型","ChatGPT","Gemini","Agent"],
-  xiaohongshu: ["小红书","运营","内容","账号","赞","阅读","爆款","笔记","创作者"],
-  education: ["学校","专业","大学","汉语言","兰州","中文","非科班","不对口","科班","读书"],
-  ability: ["核心能力","优势","擅长","自驱力","协作","复盘","跨学科","融合"],
-  ask_hr: ["有什么问题","反问","想问","了解团队","OKR","挑战","成长"],
-  weakness: ["缺点","不足","劣势","弱点","短板","有待提升","最大不足"],
-  salary: ["薪资","工资","待遇","薪酬","期望","到岗","入职","什么时候能来"],
-  student: ["学生工作","干事","青年发展","审核部","到梦空间","评优","荣誉","社团"],
-  tailing: ["泰瓴","泰瓴未来","策略增长","AI评测","EEAT","7维度","思维链"],
-  qunar: ["去哪儿","数据监控","用户运营","市场调研"],
-  wangyi: ["网易","有道","网易有道"],
-  baosite: ["佰司特","招聘","人才画像","寻访"],
-  feedback: ["用户反馈","反馈","评论","用户怎么说","效果","数据","日活"],
-  view: ["看","看作品集","作品集链接","链接","作品集网站","portfolio","要看吗","想看看"],
-  vibe: ["Vibe Coding","TRAE","AI编程","自然语言驱动"]
-};
-
-// ============================================================
-// 第三部分：分层问答知识库（每个条目自带匹配关键词列表）
+// 第二部分：问答知识库（每个条目都包含尽可能多的问法）
 // ============================================================
 const QA_DB = [];
 
 // 1. 自我介绍
 QA_DB.push({
   id: "self_intro",
-  keywords: ["介绍自己","说说你","简单自我介绍","你是谁","你好","hi","hello","您好","讲讲你自己","个人介绍","介绍一下你自己"],
+  keywords: [
+    "自我介绍", "介绍自己", "说说你", "简单自我介绍", "你是谁", "你好", "hi", "hello", "您好",
+    "讲讲你自己", "个人介绍", "介绍一下你自己", "请自我介绍", "自我介绍一下"
+  ],
   answer: `我目前的核心标签是：从汉语言到 AI 产品的复合型选手——一边是运营了两年的小红书账号，单篇最高 3.1 万+ 阅读、累计 3 万赞；一边是最近独立用 Vibe Coding 完成的阅读记录小程序，15 个引导式锚点 + 4 大核心模块，从 PRD 到上线全流程自己扛。
 
 做这件事的初心很简单——我认为产品是一个通用的观念，无论是内容、代码还是人生，用产品思维去打磨都会越来越好。所以我不是"跨界"，是把同一件事做到了不同介质上。
 
 您想先了解哪方面？实习经历、项目作品、还是我对 AI 产品的理解？`,
-  quickReplies: ['实习经历','项目作品','AI 产品理解','教育背景']
+  quickReplies: ['实习经历','项目作品','AI产品理解','教育背景']
 });
 
 // 2. 实习经历总览
 QA_DB.push({
   id: "internship",
-  keywords: ["实习经历","在哪实习","实习收获","几段实习","工作过","做过什么工作","你的经历","有什么经历","做过哪些","实习"],
+  keywords: [
+    "实习经历", "在哪实习", "实习收获", "几段实习", "工作过", "做过什么工作",
+    "你的经历", "有什么经历", "做过哪些", "实习", "实习经验", "你的实习"
+  ],
   answer: `我有四段实习经历：
 
 • 泰瓴未来｜策略增长实习生（2025.12-2026.03）—— 用 EEAT 框架 + 7 维度标准做 AI 评测和 Prompt 优化，独立负责产品网页的核心决策，还做了 B2B 获客 SOP。
@@ -667,10 +290,14 @@ QA_DB.push({
   quickReplies: ['说说泰瓴','聊聊项目','讲讲复盘习惯']
 });
 
-// 7. 核心项目（小程序）深度
+// 7. 核心项目（小程序）
 QA_DB.push({
   id: "project",
-  keywords: ["项目","作品","小程序","做过什么","代表作","亮点","核心项目","输出第一","阅读记录","作品集","阅读记录小程序"],
+  keywords: [
+    "项目", "作品", "小程序", "做过什么", "代表作", "亮点", "核心项目",
+    "输出第一", "阅读记录", "作品集", "阅读记录小程序", "项目作品",
+    "你做过什么项目", "有什么项目"
+  ],
   answer: `【输出第一】阅读/观影记录小程序是我最有成就感的项目。
 
 需求来源：我体验了豆瓣、微信读书、备忘录后发现一个共性痛点——面对空白输入框，用户的表达门槛很高、输出意愿很低。
@@ -683,10 +310,14 @@ QA_DB.push({
   quickReplies: ['技术怎么实现的','用户反馈','看作品集']
 });
 
-// 8. 技术实现细节（增加更多关键词）
+// 8. 技术实现细节
 QA_DB.push({
   id: "tech_impl",
-  keywords: ["技术怎么实现的","怎么实现","技术细节","开发流程","用的什么技术","TRAE","自然语言","代码","怎么开发","技术实现"],
+  keywords: [
+    "技术怎么实现的", "怎么实现", "技术细节", "开发流程", "用的什么技术",
+    "TRAE", "自然语言", "代码", "怎么开发", "技术实现", "技术实现",
+    "怎么做的", "如何实现"
+  ],
   answer: `【输出第一】小程序是用 Vibe Coding 方式开发的——我用 TRAE 这个 AI 编程工具，通过自然语言描述需求，让 AI 生成代码，然后我负责调试和优化。
 
 从需求描述 → 功能拆解 → 代码生成 → 调试修复，全流程用自然语言驱动开发。这个过程中，我通过调整 Prompt 指令、补充上下文、细化需求，引导 AI 产出可用的代码。
@@ -700,7 +331,11 @@ QA_DB.push({
 // 9. AI 大模型理解
 QA_DB.push({
   id: "ai_understanding",
-  keywords: ["大模型","AI","RAG","微调","Prompt","思维链","CoT","EEAT","评测","模型","ChatGPT","Gemini","AI理解"],
+  keywords: [
+    "大模型", "AI", "RAG", "微调", "Prompt", "思维链", "CoT", "EEAT",
+    "评测", "模型", "ChatGPT", "Gemini", "AI理解", "AI产品理解",
+    "你怎么看AI", "你对AI的理解"
+  ],
   answer: `我对 AI 大模型的理解不止于"会用 ChatGPT"。我系统学习过 RAG（检索增强生成）、微调的原理和适用场景，知道大模型能力边界从哪来。
 
 在泰瓴未来实习时，我用 EEAT 质量框架 + 7 维度内容标准审核 AI 产出，做过思维链（CoT）的 Prompt 调优，从"会用 Prompt"进阶到系统性优化方法论。
@@ -737,7 +372,7 @@ QA_DB.push({
   quickReplies: ['看作品集','聊聊实习','聊项目']
 });
 
-// 12. 教育背景
+// 12. 教育背景（已修改为“一个学期”）
 QA_DB.push({
   id: "education",
   keywords: ["学校","专业","大学","汉语言","兰州","中文","非科班","不对口","科班","读书","教育背景"],
@@ -749,16 +384,19 @@ QA_DB.push({
 
 第二，在当下互联网如此发达的时代，专业壁垒会越来越小。信息获取、工具使用、AI 辅助学习的门槛都被拉平了。
 
-第三，我用一年时间从中文系学生走到了能独立交付 AI 产品的位置，这个速度本身就是我最想被看到的能力。
+第三，我用一个学期的时间从中文系学生走到了能独立交付 AI 产品的位置，这个速度本身就是我最想被看到的能力。
 
 您可以直接看我的作品集网站。`,
   quickReplies: ['看作品集','聊聊项目','谈谈学习能力']
 });
 
-// 13. 核心能力
+// 13. 核心能力/优势
 QA_DB.push({
   id: "ability",
-  keywords: ["核心能力","优势","擅长","自驱力","协作","复盘","跨学科","融合","核心竞争力"],
+  keywords: [
+    "核心能力", "优势", "擅长", "自驱力", "协作", "复盘", "跨学科", "融合",
+    "核心竞争力", "你的优点", "你的长处", "比别人强在哪"
+  ],
   answer: `我认为自己有三大核心能力：
 
 ① 跨学科融合的自驱力——汉语言文学背景给了我很好的共情能力和文字表达能力，同时我又能用 Vibe Coding 独立完成产品，不因专业设限。
@@ -771,13 +409,16 @@ QA_DB.push({
   quickReplies: ['展开讲讲','聊聊实习','聊项目']
 });
 
-// 14. 缺点/不足
+// 14. 缺点/不足（已修改为“不到一个学期”）
 QA_DB.push({
   id: "weakness",
-  keywords: ["缺点","不足","劣势","弱点","短板","有待提升","最大不足","最大劣势","最弱","不够好","需要改进"],
+  keywords: [
+    "缺点", "不足", "劣势", "弱点", "短板", "有待提升", "最大不足",
+    "最大劣势", "最弱", "不够好", "需要改进", "你的缺点"
+  ],
   answer: `我最需要补的是技术深度。虽然我用 Vibe Coding 能独立交付产品，但遇到底层性能问题或复杂算法时，我还是需要 AI 来帮我写代码，自己没法独立解决。
 
-不过我在用行动弥补——从中文系到能用 AI 编程做小程序，只用了一年。如果拿到这个实习机会，我希望能在真实的工程环境里，把"会用 AI 写代码"升级成"自己能写一部分代码，AI 帮我加速剩下部分"。
+不过我在用行动弥补——从中文系到能用 AI 编程做小程序，只用了不到一个学期。如果拿到这个实习机会，我希望能在真实的工程环境里，把"会用 AI 写代码"升级成"自己能写一部分代码，AI 帮我加速剩下部分"。
 
 您觉得这个岗位最需要什么样的技术深度？`,
   quickReplies: ['说说你的优势','聊项目','谈谈学习能力']
@@ -800,7 +441,10 @@ QA_DB.push({
 // 16. 职业规划/动机
 QA_DB.push({
   id: "motivation",
-  keywords: ["为什么选择AI产品","求职动机","职业目标","为什么做产品","产品观","初心","产品思维","理念"],
+  keywords: [
+    "为什么选择AI产品", "求职动机", "职业目标", "为什么做产品", "产品观",
+    "初心", "产品思维", "理念", "为什么来", "为什么想当产品经理"
+  ],
   answer: `我选择 AI 产品方向，核心是相信产品思维可以跨越介质。我做小红书运营时，就是在用产品思维做内容——定义用户、验证假设、数据迭代。后来发现 AI 工具可以帮我把这种思维从内容延伸到代码。
 
 产品是一个通用的观念。我们学习、进步，本质上也是在磨炼产品——产品可以是人、可以是物品、可以是事情。用产品思维去对待人生，会越来越好。
@@ -843,10 +487,10 @@ QA_DB.push({
   quickReplies: ['聊聊项目','说说实习','自我介绍']
 });
 
-// 20. 作品集网站（直接给链接）
+// 20. 作品集网站
 QA_DB.push({
   id: "portfolio",
-  keywords: ["作品集","网站","portfolio","my-website","个人网站","作品集网站","作品集链接"],
+  keywords: ["作品集","网站","portfolio","my-website","个人网站","作品集网站","作品集链接","看作品集"],
   answer: `我的作品集网站是用 Vibe Coding 独立搭建的，集中展示了我的 PRD、竞品分析报告、Axure 原型、业务流程图和项目经历。
 
 🔗 作品集链接：https://chocolatewin.github.io/my-website/
@@ -856,7 +500,7 @@ QA_DB.push({
   quickReplies: ['聊项目','说说技术实现','聊聊实习']
 });
 
-// 21. 用户反馈（直接给反馈）
+// 21. 用户反馈
 QA_DB.push({
   id: "feedback",
   keywords: ["用户反馈","反馈","评论","用户怎么说","效果","数据","日活","用户"],
@@ -868,7 +512,7 @@ QA_DB.push({
   quickReplies: ['聊项目','说说技术实现','看作品集']
 });
 
-// 22. 看 / 要看吗 → 直接给作品集链接（专门处理）
+// 22. 看作品集（专门处理“看”）
 QA_DB.push({
   id: "view_portfolio",
   keywords: ["看","看作品集","要看吗","想看看","链接","作品集","看看"],
@@ -878,13 +522,13 @@ QA_DB.push({
 📱 小程序项目集：https://chocolatewin.github.io/PM-Portfolio/
 
 建议先看作品集网站，那里有完整的项目文档和设计过程。看完有任何问题，欢迎随时问我。`,
-  quickReplies: ['聊项目','说说实习','AI 产品理解']
+  quickReplies: ['聊项目','说说实习','AI产品理解']
 });
 
 // 23. 什么是 Vibe Coding
 QA_DB.push({
   id: "vibe",
-  keywords: ["Vibe Coding","TRAE","AI编程","自然语言驱动","vibe","TRAE工具"],
+  keywords: ["Vibe Coding","TRAE","AI编程","自然语言驱动","vibe","TRAE工具","什么是Vibe Coding"],
   answer: `Vibe Coding 是一种用自然语言驱动 AI 编程工具来生成代码的开发方式。我用的具体工具是 TRAE。
 
 使用流程是：我用自然语言描述需求 → TRAE 生成代码 → 我进行调试和优化，并补充上下文让 AI 产出更准确的代码。这个过程中，我需要清晰地拆解功能、调整 Prompt、细化需求，引导 AI 产出可用的代码。
@@ -921,7 +565,47 @@ QA_DB.push({
 });
 
 // ============================================================
-// 第四部分：对话上下文
+// 新增常见面试问题条目
+// ============================================================
+
+// 26. 项目难点
+QA_DB.push({
+  id: "project_challenge",
+  keywords: ["项目难点","挑战","踩坑","困难","遇到什么问题","怎么解决的"],
+  answer: `做【输出第一】小程序时，最大的挑战是**引导式锚点的设计**——既要让用户有方向，又不能限制他们的表达自由。
+
+我最初设计了 20 个锚点，测试后发现用户觉得太冗长，于是砍到 15 个，并增加了“自定义书评”模块，让用户既能跟着走，也能自己发挥。
+
+另一个挑战是**与 AI 编程工具的协作**——刚开始 TRAE 生成的代码经常有 bug，我需要不断调整 Prompt、补充上下文，才能得到可用的代码。这个过程让我真正理解了“大模型能力边界”的含义。`,
+  quickReplies: ['技术怎么实现的','用户反馈','聊项目']
+});
+
+// 27. 实习收获
+QA_DB.push({
+  id: "internship_harvest",
+  keywords: ["实习收获","学到什么","成长","感悟"],
+  answer: `最大的收获是**从“执行者”变成“设计者”**。
+
+在泰瓴未来，我不只是执行 AI 评测任务，而是参与了 Prompt 框架的设计、评测标准的制定，甚至独立负责了产品网页的决策。这让我意识到，产品经理不是“传话筒”，而是“翻译器”——把技术语言翻译成用户价值。
+
+另外，我养成了**飞书日报复盘的习惯**，每天记录做了什么、卡在哪、怎么解决。这个习惯让我成长很快。`,
+  quickReplies: ['说说泰瓴','聊聊项目','谈谈能力']
+});
+
+// 28. 团队协作经历
+QA_DB.push({
+  id: "teamwork",
+  keywords: ["团队","协作","合作","配合","协同","沟通","跨部门"],
+  answer: `在泰瓴未来，我和技术团队配合完成了“前置协议约束”方案的落地，从产品侧提出需求，到技术侧评估可行性，最后一起推动上线。
+
+在去哪儿，我协同运营、数据等多个方向的同事推进区域项目，做了 20+ 组分人群的运营地面拓展。
+
+我觉得好的沟通不是“会说”，而是“听得懂对方的需求，然后用对方能理解的方式回应”——这个能力在做产品时尤其重要。`,
+  quickReplies: ['说说实习','聊项目','谈谈优势']
+});
+
+// ============================================================
+// 第三部分：对话上下文
 // ============================================================
 const ChatContext = {
   history: [],
@@ -945,24 +629,55 @@ const ChatContext = {
 };
 
 // ============================================================
-// 第五部分：匹配算法（直接关键词包含 + 上下文加分）
+// 第四部分：匹配算法（增加精确匹配前置）
 // ============================================================
 function matchQuestion(userMsg) {
-  const lower = userMsg.toLowerCase();
+  const lower = userMsg.trim().toLowerCase();
+  
+  // 先尝试精确匹配快捷按钮文字
+  const exactMatchMap = {
+    '自我介绍': 'self_intro',
+    '实习经历': 'internship',
+    '项目作品': 'project',
+    'ai产品理解': 'ai_understanding',
+    '教育背景': 'education',
+    '看作品集': 'portfolio',
+    '用户反馈': 'feedback',
+    '技术实现': 'tech_impl',
+    '什么是vibe coding': 'vibe',
+    '上游治理是什么': 'upstream',
+    '泰瓴未来': 'tailing',
+    '去哪儿': 'qunar',
+    '网易有道': 'wangyi',
+    '佰司特': 'baosite',
+    '展开讲讲': 'confirm',
+    '聊聊项目': 'project',
+    '说说实习': 'internship',
+    '谈谈能力': 'ability',
+    '聊项目': 'project',
+    '看作品集': 'view_portfolio',
+    '说说你的优势': 'ability',
+    '谈谈学习能力': 'ability',
+    '你的优点': 'ability',
+    '你的缺点': 'weakness'
+  };
+  if (exactMatchMap[lower]) {
+    const target = QA_DB.find(q => q.id === exactMatchMap[lower]);
+    if (target) return { qa: target, score: 999 };
+  }
+
+  // 否则走模糊匹配
   let bestMatch = null;
   let bestScore = 0;
 
   for (const qa of QA_DB) {
     let score = 0;
-    // 遍历该条目所有关键词，匹配一个加1分
     for (const kw of qa.keywords) {
       if (lower.includes(kw.toLowerCase())) {
         score += 1;
       }
     }
-    // 如果分数>0，再考虑上下文加分
     if (score > 0) {
-      // 上文话题关联加分：如果当前话题和该条目相关，+1
       const lastTopic = ChatContext.getLastTopic();
       if (lastTopic) {
         for (const kw of qa.keywords) {
@@ -972,7 +687,6 @@ function matchQuestion(userMsg) {
           }
         }
       }
-      // 指代词加分
       if (lower.includes('这个') || lower.includes('那个') || lower.includes('它')) {
         const lastTopic = ChatContext.getLastTopic();
         if (lastTopic) {
@@ -984,7 +698,6 @@ function matchQuestion(userMsg) {
           }
         }
       }
-      // 长度加分
       if (userMsg.length > 10) score += 0.3;
     }
     if (score > bestScore) {
@@ -993,7 +706,6 @@ function matchQuestion(userMsg) {
     }
   }
 
-  // 阈值：至少匹配到1个关键词
   if (bestScore >= 1 && bestMatch) {
     return { qa: bestMatch, score: bestScore };
   }
@@ -1001,7 +713,7 @@ function matchQuestion(userMsg) {
 }
 
 // ============================================================
-// 第六部分：兜底逻辑
+// 第五部分：兜底逻辑
 // ============================================================
 function getFallback(userMsg) {
   const hardKeywords = ['薪资','工资','待遇','薪酬','期望薪资','到岗时间','入职时间'];
@@ -1016,12 +728,12 @@ function getFallback(userMsg) {
                           `您可以试试问我的实习经历、项目作品，或者对 AI 产品的理解。`;
   return {
     type: 'weak',
-    message: `这块我暂时没有准备到具体的案例，不过我在相关经历里做过类似的事。${guide}\n\n直接告诉我您想了解的具体方向 👇`
+    message: `${KNOWLEDGE_BASE.fallbackWeak} ${guide}\n\n直接告诉我您想了解的具体方向 👇`
   };
 }
 
 // ============================================================
-// 第七部分：渲染与交互
+// 第六部分：渲染与交互
 // ============================================================
 let isTyping = false;
 const chatMessages = document.getElementById('chatMessages');
@@ -1137,7 +849,7 @@ async function sendMessage() {
       let topic = '';
       let quickReplies = [];
 
-      // 1. 数字选择
+      // 数字选择
       if (isNumberChoice(text) && currentQuickReplies.length > 0) {
         const idx = parseNumberChoice(text);
         if (idx >= 0 && idx < currentQuickReplies.length) {
@@ -1151,7 +863,7 @@ async function sendMessage() {
         }
       }
 
-      // 2. 正常匹配
+      // 普通匹配（包含精确匹配前置）
       if (!answer) {
         const result = matchQuestion(text);
         if (result) {
@@ -1164,7 +876,7 @@ async function sendMessage() {
           if (fb.type === 'hard') {
             quickReplies = ['自我介绍','聊聊项目','说说实习'];
           } else {
-            quickReplies = ['实习经历','项目作品','AI 产品理解','自我介绍'];
+            quickReplies = ['实习经历','项目作品','AI产品理解','自我介绍'];
           }
         }
       }
@@ -1191,7 +903,7 @@ messageInput.addEventListener('input', function() {
 });
 
 // ============================================================
-// 第八部分：初始化（清晰欢迎语）
+// 第七部分：初始化
 // ============================================================
 addMessage(
 `👋 你好！我是 Winnie 的 AI 面试分身。
@@ -1206,7 +918,7 @@ addMessage(
 
 或者直接点击下面的按钮开始 👇`,
 false,
-['自我介绍','实习经历','项目作品','AI 产品理解']
+['自我介绍','实习经历','项目作品','AI产品理解']
 );
 </script>
 </body>
