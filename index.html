@@ -1,925 +1,1118 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Winnie - AI 产品实习生 | 数字面试分身</title>
-  <style>
-    /* 样式与之前完全相同，为节省篇幅省略，但你的项目里必须保留完整样式 */
-    :root {
-      --primary-color: #2563eb;
-      --primary-light: #3b82f6;
-      --accent-color: #06b6d4;
-      --bg-dark: #0f172a;
-      --bg-card: rgba(30, 41, 59, 0.7);
-      --text-primary: #f1f5f9;
-      --text-secondary: #94a3b8;
-      --border-color: rgba(255, 255, 255, 0.1);
-    }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-      min-height: 100vh;
-    }
-    .container { display:flex; flex-direction:column; height:100vh; }
-    @media (min-width:1024px) { .container { flex-direction:row; } }
-    .sidebar { width:100%; max-width:320px; padding:24px; border-bottom:1px solid var(--border-color); }
-    @media (min-width:1024px) { .sidebar { border-right:1px solid var(--border-color); border-bottom:none; } }
-    .profile-card {
-      background: var(--bg-card);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 16px;
-      padding: 24px;
-      text-align: center;
-    }
-    .avatar {
-      width:80px; height:80px; margin:0 auto 16px; border-radius:50%;
-      background: linear-gradient(135deg, #3b82f6, #06b6d4);
-      display:flex; align-items:center; justify-content:center;
-      font-size:32px; color:white; animation:float 6s ease-in-out infinite;
-    }
-    @keyframes float { 0%,100%{transform:translateY(0px)} 50%{transform:translateY(-8px)} }
-    .profile-name { font-size:20px; font-weight:600; color:var(--text-primary); margin-bottom:4px; }
-    .profile-alias { font-size:14px; color:var(--text-secondary); margin-bottom:16px; }
-    .profile-badge {
-      display:inline-block; padding:6px 14px;
-      background:rgba(37,99,235,0.15); border:1px solid rgba(37,99,235,0.3);
-      border-radius:20px; font-size:12px; color:#60a5fa; margin-bottom:20px;
-    }
-    .profile-info { text-align:left; }
-    .info-item { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.05); }
-    .info-item:last-child { border-bottom:none; }
-    .info-icon { width:24px; height:24px; border-radius:8px; background:rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center; color:#60a5fa; font-size:12px; }
-    .info-content { flex:1; }
-    .info-label { font-size:11px; color:var(--text-secondary); margin-bottom:2px; }
-    .info-value { font-size:13px; color:var(--text-primary); }
-    .link-buttons { display:flex; flex-direction:column; gap:10px; margin-top:20px; }
-    .link-btn {
-      display:flex; align-items:center; justify-content:center; gap:8px; padding:12px;
-      border-radius:10px; text-decoration:none; font-size:14px; font-weight:500; transition:all 0.3s ease;
-    }
-    .link-btn-primary {
-      background:rgba(59,130,246,0.15); border:1px solid rgba(59,130,246,0.3); color:#60a5fa;
-    }
-    .link-btn-primary:hover {
-      background:rgba(59,130,246,0.25); border-color:rgba(59,130,246,0.5); color:#93bbfc;
-      transform:translateY(-2px); box-shadow:0 4px 12px rgba(59,130,246,0.15);
-    }
-    .link-btn-secondary {
-      background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.2); color:#60a5fa;
-    }
-    .link-btn-secondary:hover {
-      background:rgba(59,130,246,0.18); border-color:rgba(59,130,246,0.4); color:#93bbfc;
-      transform:translateY(-2px);
-    }
-    .link-btn-feedback {
-      background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); color:#94a3b8; font-size:13px;
-    }
-    .link-btn-feedback:hover {
-      background:rgba(255,255,255,0.1); border-color:rgba(255,255,255,0.2); color:#f1f5f9;
-      transform:translateY(-2px);
-    }
-    .link-external-icon { font-size:12px; opacity:0.6; margin-left:2px; }
-    .chat-area { flex:1; display:flex; flex-direction:column; min-height:0; }
-    .chat-header { padding:20px 24px; border-bottom:1px solid var(--border-color); display:flex; align-items:center; justify-content:space-between; }
-    .chat-header-left { display:flex; align-items:center; gap:12px; }
-    .chat-avatar { width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg, #3b82f6, #06b6d4); display:flex; align-items:center; justify-content:center; font-size:16px; color:white; }
-    .chat-title { font-size:16px; font-weight:600; color:var(--text-primary); }
-    .chat-status { font-size:12px; color:#22c55e; display:flex; align-items:center; gap:6px; }
-    .status-dot { width:8px; height:8px; border-radius:50%; background:#22c55e; animation:pulse 2s infinite; }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
-    .chat-messages { flex:1; overflow-y:auto; padding:24px; display:flex; flex-direction:column; gap:16px; }
-    .scrollbar-thin::-webkit-scrollbar { width:6px; }
-    .scrollbar-thin::-webkit-scrollbar-track { background:rgba(255,255,255,0.05); }
-    .scrollbar-thin::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.2); border-radius:3px; }
-    .scrollbar-thin::-webkit-scrollbar-thumb:hover { background:rgba(255,255,255,0.3); }
-    .message-wrapper { display:flex; flex-direction:column; gap:8px; }
-    .message { display:flex; gap:12px; }
-    .message-user { flex-direction:row-reverse; }
-    .message-avatar { width:36px; height:36px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:14px; color:white; }
-    .message-avatar-ai { background:linear-gradient(135deg, #3b82f6, #06b6d4); }
-    .message-avatar-user { background:rgba(255,255,255,0.15); }
-    .message-bubble { max-width:70%; padding:12px 16px; border-radius:18px; font-size:14px; line-height:1.6; word-wrap:break-word; }
-    .message-bubble-ai { background:var(--bg-card); border:1px solid rgba(255,255,255,0.08); color:var(--text-primary); border-bottom-left-radius:4px; }
-    .message-bubble-user { background:linear-gradient(135deg, #2563eb, #1d4ed8); color:white; border-bottom-right-radius:4px; }
-    .quick-replies { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; margin-left:48px; }
-    .quick-reply-btn {
-      background:rgba(59,130,246,0.12); border:1px solid rgba(59,130,246,0.25); border-radius:20px;
-      padding:6px 16px; color:#60a5fa; font-size:13px; cursor:pointer; transition:all 0.3s ease; font-family:inherit;
-    }
-    .quick-reply-btn:hover { background:rgba(59,130,246,0.25); border-color:rgba(59,130,246,0.5); transform:translateY(-1px); }
-    .typing-indicator { display:flex; gap:4px; padding:12px 16px; }
-    .typing-dot { width:8px; height:8px; border-radius:50%; background:var(--text-secondary); animation:typing 1.4s infinite ease-in-out both; }
-    .typing-dot:nth-child(1) { animation-delay:-0.32s; }
-    .typing-dot:nth-child(2) { animation-delay:-0.16s; }
-    @keyframes typing { 0%,80%,100%{transform:scale(0)} 40%{transform:scale(1)} }
-    .chat-input-area { padding:20px 24px; border-top:1px solid var(--border-color); background:rgba(15,23,42,0.95); }
-    .input-wrapper { display:flex; gap:12px; align-items:flex-end; }
-    .input-field {
-      flex:1; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:12px;
-      padding:12px 16px; color:var(--text-primary); font-size:14px; outline:none; resize:none;
-      min-height:44px; max-height:120px; line-height:1.5;
-    }
-    .input-field:focus { border-color:#3b82f6; box-shadow:0 0 0 3px rgba(37,99,235,0.1); }
-    .input-field::placeholder { color:#64748b; }
-    .send-btn {
-      width:44px; height:44px; border-radius:12px; background:linear-gradient(135deg, #2563eb, #06b6d4);
-      border:none; color:white; cursor:pointer; display:flex; align-items:center; justify-content:center;
-      font-size:16px; transition:all 0.3s ease; flex-shrink:0;
-    }
-    .send-btn:hover:not(:disabled) { background:linear-gradient(135deg, #3b82f6, #22d3ee); transform:translateY(-2px); box-shadow:0 4px 12px rgba(37,99,235,0.3); }
-    .send-btn:active:not(:disabled) { transform:translateY(0); }
-    .send-btn:disabled { opacity:0.5; cursor:not-allowed; }
-    .system-badge { text-align:center; padding:8px 16px; margin-bottom:16px; }
-    .system-badge span { font-size:12px; color:var(--text-secondary); background:rgba(255,255,255,0.05); padding:4px 12px; border-radius:12px; }
-    .divider { margin-top:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.06); }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Winnie AI 面试分身</title>
+    <style>
+        /* ===== 全局重置 ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f7f8fc;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+
+        /* ===== 主容器 ===== */
+        .chat-container {
+            width: 100%;
+            max-width: 420px;
+            height: 700px;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* ===== 顶部栏 ===== */
+        .chat-header {
+            background: white;
+            padding: 18px 22px 12px 22px;
+            border-bottom: 1px solid #f0f0f0;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4F7CFF, #6C5CE7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .header-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .header-info h1 {
+            font-size: 17px;
+            font-weight: 600;
+            color: #1a1a2e;
+            line-height: 1.3;
+        }
+
+        .header-info .status {
+            font-size: 12px;
+            color: #22c55e;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .header-info .status::before {
+            content: '';
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        .header-info .sub {
+            font-size: 11px;
+            color: #999;
+            margin-top: 1px;
+        }
+
+        /* ===== 消息列表 ===== */
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 18px 8px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            background: #fafbff;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 4px;
+        }
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #d0d5e0;
+            border-radius: 4px;
+        }
+
+        /* ===== 单条消息 ===== */
+        .message {
+            display: flex;
+            gap: 10px;
+            max-width: 88%;
+            animation: msg-in 0.3s ease-out;
+        }
+
+        @keyframes msg-in {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message.bot {
+            align-self: flex-start;
+        }
+
+        .message .bubble {
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 14.5px;
+            line-height: 1.65;
+            word-break: break-word;
+            white-space: pre-wrap;
+        }
+
+        .message.bot .bubble {
+            background: white;
+            color: #1a1a2e;
+            border-top-left-radius: 4px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+        }
+
+        .message.user .bubble {
+            background: #4F7CFF;
+            color: white;
+            border-top-right-radius: 4px;
+        }
+
+        .message .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: white;
+            background: #e8ecf4;
+        }
+
+        .message.bot .avatar {
+            background: linear-gradient(135deg, #4F7CFF, #6C5CE7);
+        }
+
+        .message.user .avatar {
+            background: #d0d8e8;
+            color: #666;
+        }
+
+        /* ===== 快捷按钮 ===== */
+        .quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 8px 6px 2px 6px;
+            align-self: flex-start;
+            width: 100%;
+        }
+
+        .quick-replies .qr-btn {
+            background: #f0f2f8;
+            border: none;
+            padding: 7px 14px;
+            border-radius: 18px;
+            font-size: 13px;
+            color: #2d3748;
+            cursor: pointer;
+            transition: all 0.15s;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .quick-replies .qr-btn:hover {
+            background: #e2e6f0;
+            transform: translateY(-1px);
+        }
+
+        .quick-replies .qr-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* ===== 底部输入区 ===== */
+        .chat-input-area {
+            border-top: 1px solid #f0f0f0;
+            padding: 12px 18px 16px 18px;
+            background: white;
+            flex-shrink: 0;
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .chat-input-area textarea {
+            flex: 1;
+            border: 1.5px solid #e8ecf4;
+            border-radius: 20px;
+            padding: 10px 16px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: none;
+            outline: none;
+            transition: border 0.2s;
+            min-height: 44px;
+            max-height: 100px;
+            line-height: 1.5;
+            background: #fafbff;
+        }
+
+        .chat-input-area textarea:focus {
+            border-color: #4F7CFF;
+            background: white;
+        }
+
+        .chat-input-area .send-btn {
+            background: #4F7CFF;
+            border: none;
+            color: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.15s;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-input-area .send-btn:hover {
+            background: #3a66d9;
+            transform: scale(1.02);
+        }
+
+        .chat-input-area .send-btn:active {
+            transform: scale(0.94);
+        }
+
+        /* ===== 滚动条 ===== */
+        .chat-messages {
+            scroll-behavior: smooth;
+        }
+
+        /* ===== 打字指示器 ===== */
+        .typing-indicator {
+            display: flex;
+            gap: 5px;
+            padding: 12px 16px;
+            background: white;
+            border-radius: 16px;
+            border-top-left-radius: 4px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+            align-self: flex-start;
+            max-width: 70px;
+        }
+
+        .typing-indicator span {
+            display: block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #b0b8c8;
+            animation: typing-bounce 1.4s ease-in-out infinite;
+        }
+
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing-bounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-8px); }
+        }
+
+        /* ===== 消息中的链接 ===== */
+        .bubble a {
+            color: #4F7CFF;
+            text-decoration: underline;
+            word-break: break-all;
+        }
+        .bubble a:hover {
+            color: #3a66d9;
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 480px) {
+            body { padding: 8px; }
+            .chat-container {
+                height: 94vh;
+                max-height: 780px;
+                border-radius: 20px;
+            }
+            .message .bubble { font-size: 14px; padding: 10px 14px; }
+            .chat-header { padding: 14px 16px 10px 16px; }
+            .chat-messages { padding: 12px 14px 4px 14px; }
+            .chat-input-area { padding: 8px 14px 12px 14px; }
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-  <aside class="sidebar">
-    <div class="profile-card">
-      <div class="avatar">W</div>
-      <h2 class="profile-name">陈致巧</h2>
-      <p class="profile-alias">@winnie</p>
-      <span class="profile-badge">3万赞小红书创作者 × Vibe Coding实践者</span>
-      <div class="profile-info">
-        <div class="info-item"><div class="info-icon">🏫</div><div class="info-content"><div class="info-label">教育背景</div><div class="info-value">兰州大学 · 汉语言文学</div></div></div>
-        <div class="info-item"><div class="info-icon">🎯</div><div class="info-content"><div class="info-label">核心标签</div><div class="info-value">3万赞小红书创作者 × Vibe Coding实践者</div></div></div>
-        <div class="info-item"><div class="info-icon">📱</div><div class="info-content"><div class="info-label">联系方式</div><div class="info-value">19298915379</div></div></div>
-        <div class="info-item"><div class="info-icon">✉️</div><div class="info-content"><div class="info-label">邮箱</div><div class="info-value">32203783@qq.com</div></div></div>
-      </div>
-      <div class="link-buttons">
-        <a href="https://chocolatewin.github.io/my-website/" target="_blank" class="link-btn link-btn-primary"><span>🌐</span> 作品集网站 <span class="link-external-icon">↗</span></a>
-        <a href="https://chocolatewin.github.io/PM-Portfolio/" target="_blank" class="link-btn link-btn-secondary"><span>📱</span> 小程序项目集 <span class="link-external-icon">↗</span></a>
-      </div>
-      <div class="divider">
-        <a href="https://wj.qq.com/s2/27204893/ff70/" target="_blank" class="link-btn link-btn-feedback">💬 给 AI 面试分身留言反馈 <span class="link-external-icon">↗</span></a>
-      </div>
+
+<div class="chat-container">
+
+    <!-- ===== 顶部栏 ===== -->
+    <div class="chat-header">
+        <div class="header-avatar">W</div>
+        <div class="header-info">
+            <h1>Winnie AI 面试分身</h1>
+            <div class="status">在线 · 随时可聊</div>
+            <div class="sub">HR 专属 · 点击问题即可对话</div>
+        </div>
     </div>
-  </aside>
-  <main class="chat-area">
-    <header class="chat-header">
-      <div class="chat-header-left"><div class="chat-avatar">W</div><div><h3 class="chat-title">Winnie AI 面试分身</h3><span class="chat-status"><span class="status-dot"></span>在线</span></div></div>
-    </header>
-    <div class="chat-messages scrollbar-thin" id="chatMessages"><div class="system-badge"><span>AI 数字面试分身已就绪</span></div></div>
-    <footer class="chat-input-area">
-      <div class="input-wrapper">
-        <textarea id="messageInput" class="input-field" placeholder="输入您的问题，或点击下方快捷按钮..." rows="1" onkeydown="handleKeyDown(event)"></textarea>
-        <button id="sendBtn" class="send-btn" onclick="sendMessage()">→</button>
-      </div>
-    </footer>
-  </main>
+
+    <!-- ===== 消息区域 ===== -->
+    <div class="chat-messages" id="chatMessages">
+        <!-- 开场白由 JS 渲染 -->
+    </div>
+
+    <!-- ===== 底部输入 ===== -->
+    <div class="chat-input-area">
+        <textarea id="userInput" rows="1" placeholder="输入你想问的…"></textarea>
+        <button class="send-btn" id="sendBtn">➤</button>
+    </div>
+
 </div>
 
 <script>
-// ============================================================
-// 第一部分：基础信息
-// ============================================================
-const KNOWLEDGE_BASE = {
-  name: "陈致巧",
-  alias: "winnie",
-  school: "兰州大学",
-  major: "汉语言文学",
-  graduationDate: "2028.06",
-  targetPosition: "AI 产品实习生",
-  phone: "19298915379",
-  email: "32203783@qq.com",
-  portfolioUrl: "https://chocolatewin.github.io/my-website/",
-  miniProgramUrl: "https://chocolatewin.github.io/PM-Portfolio/",
-  fallbackWeak: "这块我暂时没准备到具体案例，不过我在相关经历里做过类似的事。咱们可以继续聊聊您感兴趣的方向，比如实习、项目或 AI 理解。",
-  fallbackHard: "这个问题我的简历里没有展开，欢迎联系我细聊，手机/微信 19298915379。"
-};
-
-// ============================================================
-// 第二部分：问答知识库（每个条目都包含尽可能多的问法）
-// ============================================================
-const QA_DB = [];
-
-// 1. 自我介绍
-QA_DB.push({
-  id: "self_intro",
-  keywords: [
-    "自我介绍", "介绍自己", "说说你", "简单自我介绍", "你是谁", "你好", "hi", "hello", "您好",
-    "讲讲你自己", "个人介绍", "介绍一下你自己", "请自我介绍", "自我介绍一下"
-  ],
-  answer: `我目前的核心标签是：从汉语言到 AI 产品的复合型选手——一边是运营了两年的小红书账号，单篇最高 3.1 万+ 阅读、累计 3 万赞；一边是最近独立用 Vibe Coding 完成的阅读记录小程序，15 个引导式锚点 + 4 大核心模块，从 PRD 到上线全流程自己扛。
-
-做这件事的初心很简单——我认为产品是一个通用的观念，无论是内容、代码还是人生，用产品思维去打磨都会越来越好。所以我不是"跨界"，是把同一件事做到了不同介质上。
-
-您想先了解哪方面？实习经历、项目作品、还是我对 AI 产品的理解？`,
-  quickReplies: ['实习经历','项目作品','AI产品理解','教育背景']
-});
-
-// 2. 实习经历总览
-QA_DB.push({
-  id: "internship",
-  keywords: [
-    "实习经历", "在哪实习", "实习收获", "几段实习", "工作过", "做过什么工作",
-    "你的经历", "有什么经历", "做过哪些", "实习", "实习经验", "你的实习"
-  ],
-  answer: `我有四段实习经历：
-
-• 泰瓴未来｜策略增长实习生（2025.12-2026.03）—— 用 EEAT 框架 + 7 维度标准做 AI 评测和 Prompt 优化，独立负责产品网页的核心决策，还做了 B2B 获客 SOP。
-
-• 去哪儿旅行｜小红书运营实习生（2025.07-2025.09）—— 监控 8 个账号的日度数据，主导 20+ 组分人群的运营拓展。
-
-• 网易有道｜小红书内容运营实习生（2024.11-2025.01）—— 独立负责高中领域小红书内容创作，日更 1 篇。
-
-• 广州佰司特｜招聘岗实习（2024.10-2024.11）—— 参与技术、产品岗位的人才寻访，养成了飞书日报复盘的习惯。
-
-您想深入了解哪一段？`,
-  quickReplies: ['泰瓴未来','去哪儿','网易有道','佰司特']
-});
-
-// 3. 泰瓴未来深度
-QA_DB.push({
-  id: "tailing",
-  keywords: ["泰瓴","泰瓴未来","策略增长","AI评测","EEAT","7维度","思维链","泰瓴实习"],
-  answer: `在泰瓴未来，我核心做了四件事：
-
-1. AI 模型评测与调优：用 EEAT 质量框架 + 7 维度内容标准审核 AI 产出，定位到"AI 产出与决策人真实背景匹配度不足"的问题，优化 Prompt 框架，用思维链（CoT）引导 AI 生成更贴近业务的开发信件。
-
-2. Agent 产品认知：意识到一次错误输出会引发多轮返工，形成了"上游治理，减少下游返工"的方法论——好产品是设计出来的，不是修出来的。
-
-3. B 端产品优化：独立负责产品网页的分层信息架构、品牌故事、CTA 按钮设计，体会到"每一个像素都是决策"。
-
-4. B2B 获客 SOP：把 Outbound 搜索挖掘沉淀为标准化流程——客户分层 → 背调 → KDM 挖掘 → 内容定制 → 技术排期。
-
-这段实习让我从"会用 Prompt"进阶到了系统性优化方法论。`,
-  quickReplies: ['上游治理是什么','说说去哪儿','聊聊项目']
-});
-
-// 4. 去哪儿深度
-QA_DB.push({
-  id: "qunar",
-  keywords: ["去哪儿","数据监控","用户运营","市场调研","去哪儿实习"],
-  answer: `在去哪儿，我负责小红书运营，核心工作是：
-
-• 内容策划：双赛道产出，视频 + 图文双形态
-• 数据监控：独立监控 8 个账号的日度数据（6 项核心指标），输出日报和对标分析
-• 用户运营：主导 20+ 组分人群的运营地面拓展，建立"人群画像-内容标签"匹配机制
-• 市场调研：抓取华东区域选题流量数据，交叉验证 App 榜单/位置筛选/搜索趋势
-
-这段经历让我很早就习惯用"产品指标"（阅读、点赞、互动率）来评价自己的工作。`,
-  quickReplies: ['说说泰瓴','聊聊项目','看作品集']
-});
-
-// 5. 网易有道深度
-QA_DB.push({
-  id: "wangyi",
-  keywords: ["网易","有道","网易有道","网易实习"],
-  answer: `在网易有道，我独立负责高中学习领域的小红书内容创作，日更 1 篇。入职笔试就是凭内容质量和封面创意脱颖而出的。
-
-这段经历锻炼了我"在高压下持续输出"的能力，也让我严格执行 SOP——笔记的一次通过率一直比较高。`,
-  quickReplies: ['说说去哪儿','聊聊项目']
-});
-
-// 6. 佰司特深度
-QA_DB.push({
-  id: "baosite",
-  keywords: ["佰司特","招聘","人才画像","寻访","佰司特实习"],
-  answer: `在广州佰司特，我参与技术、产品、职能类岗位的招聘，从分析 JD → 构建人才画像 → 完成寻访。
-
-这段经历让我从"候选人"视角切到了"招聘方"视角——知道 HR 是怎么看简历的、筛人的标准是什么。后来我做作品集网站时，也是站在 HR 视角去设计信息层级。
-
-飞书日报驱动的自我复盘习惯就是在这段实习养成的。`,
-  quickReplies: ['说说泰瓴','聊聊项目','讲讲复盘习惯']
-});
-
-// 7. 核心项目（小程序）
-QA_DB.push({
-  id: "project",
-  keywords: [
-    "项目", "作品", "小程序", "做过什么", "代表作", "亮点", "核心项目",
-    "输出第一", "阅读记录", "作品集", "阅读记录小程序", "项目作品",
-    "你做过什么项目", "有什么项目"
-  ],
-  answer: `【输出第一】阅读/观影记录小程序是我最有成就感的项目。
-
-需求来源：我体验了豆瓣、微信读书、备忘录后发现一个共性痛点——面对空白输入框，用户的表达门槛很高、输出意愿很低。
-
-我做了什么：独立完成 PRD（MVP 功能边界+优先级排期）、业务流程图、Axure 高保真交互原型；定义 15 个引导式锚点 + 自定义书评的记录模式，降低表达门槛；用 TRAE 做 Vibe Coding 全流程开发。
-
-项目验证了：我不是"只懂内容不懂技术"的选手，而是能用产品思维驱动 AI 协作，从需求到上线全流程交付的人。
-
-这个项目在作品集网站里有完整的 PRD、Axure 原型和业务流程图，要看吗？`,
-  quickReplies: ['技术怎么实现的','用户反馈','看作品集']
-});
-
-// 8. 技术实现细节
-QA_DB.push({
-  id: "tech_impl",
-  keywords: [
-    "技术怎么实现的", "怎么实现", "技术细节", "开发流程", "用的什么技术",
-    "TRAE", "自然语言", "代码", "怎么开发", "技术实现", "技术实现",
-    "怎么做的", "如何实现"
-  ],
-  answer: `【输出第一】小程序是用 Vibe Coding 方式开发的——我用 TRAE 这个 AI 编程工具，通过自然语言描述需求，让 AI 生成代码，然后我负责调试和优化。
-
-从需求描述 → 功能拆解 → 代码生成 → 调试修复，全流程用自然语言驱动开发。这个过程中，我通过调整 Prompt 指令、补充上下文、细化需求，引导 AI 产出可用的代码。
-
-这验证了"大模型能力边界 × 用户需求"的匹配方式。我在泰瓴未来做的 EEAT 框架 + CoT Prompt 调优，本质上也是同一套方法论。
-
-想了解更多细节吗？`,
-  quickReplies: ['什么是Vibe Coding','说说实习','看作品集']
-});
-
-// 9. AI 大模型理解
-QA_DB.push({
-  id: "ai_understanding",
-  keywords: [
-    "大模型", "AI", "RAG", "微调", "Prompt", "思维链", "CoT", "EEAT",
-    "评测", "模型", "ChatGPT", "Gemini", "AI理解", "AI产品理解",
-    "你怎么看AI", "你对AI的理解"
-  ],
-  answer: `我对 AI 大模型的理解不止于"会用 ChatGPT"。我系统学习过 RAG（检索增强生成）、微调的原理和适用场景，知道大模型能力边界从哪来。
-
-在泰瓴未来实习时，我用 EEAT 质量框架 + 7 维度内容标准审核 AI 产出，做过思维链（CoT）的 Prompt 调优，从"会用 Prompt"进阶到系统性优化方法论。
-
-关于大模型幻觉：我认为现在的核心问题不是"幻觉存在"，而是"幻觉如何被控制"。通过约束协议、评测标准、上下文分层，可以在源头拦住大部分问题。
-
-这块我可以展开讲，需要具体聊聊吗？`,
-  quickReplies: ['展开讲讲','说说实习','聊项目']
-});
-
-// 10. Agent 理解
-QA_DB.push({
-  id: "agent",
-  keywords: ["Agent","代理","上游治理","返工","连锁成本","约束协议","前置协议","Agent产品"],
-  answer: `我对 Agent 产品的理解是：它和传统产品最大的差异在于——一次错误输出会在下游引发多轮返工的连锁成本。所以我的核心方法是"上游治理，减少下游返工"。
-
-在泰瓴未来实习时，我参与了"前置协议约束"方案落地，让 Prompt 框架、约束协议、评测标准在源头就把问题拦住。好产品永远是设计出来的，不是修出来的。
-
-关于这套方法论，我可以展开讲讲我的具体实践，要听吗？`,
-  quickReplies: ['展开讲讲','说说实习','聊项目']
-});
-
-// 11. 小红书运营
-QA_DB.push({
-  id: "xiaohongshu",
-  keywords: ["小红书","运营","内容","账号","赞","阅读","爆款","笔记","创作者"],
-  answer: `我不觉得自己"不做内容/运营了"，而是一直在做产品。小红书运营本质上就是产品运营——定义目标用户、建立内容假设、数据验证、迭代选题。
-
-我把账号当作最小可行性产品（MVP）在运营，单篇最高 3.1 万+ 阅读、累计 3 万赞。选题策划、文案撰写、排版视觉全流程独立完成。
-
-冷启动时期：我先测试了 5 种不同风格的内容方向，用数据筛选出了"高中学习"这个细分赛道，然后集中资源深挖。
-
-现在我只是把这种产品思维延伸到了 AI 产品领域。`,
-  quickReplies: ['看作品集','聊聊实习','聊项目']
-});
-
-// 12. 教育背景（已修改为“一个学期”）
-QA_DB.push({
-  id: "education",
-  keywords: ["学校","专业","大学","汉语言","兰州","中文","非科班","不对口","科班","读书","教育背景"],
-  answer: `我在兰州大学读汉语言文学专业，全日制本科，预计 2028 年 6 月毕业。
-
-确实，我不是计算机或数据专业出身。但我想说三点：
-
-第一，我不是零基础喊口号——SQL 我自学后在力扣和牛客上刷过题，AI 大模型的 RAG、微调我系统学过，小程序是独立跑通了 Vibe Coding 全流程。
-
-第二，在当下互联网如此发达的时代，专业壁垒会越来越小。信息获取、工具使用、AI 辅助学习的门槛都被拉平了。
-
-第三，我用一个学期的时间从中文系学生走到了能独立交付 AI 产品的位置，这个速度本身就是我最想被看到的能力。
-
-您可以直接看我的作品集网站。`,
-  quickReplies: ['看作品集','聊聊项目','谈谈学习能力']
-});
-
-// 13. 核心能力/优势
-QA_DB.push({
-  id: "ability",
-  keywords: [
-    "核心能力", "优势", "擅长", "自驱力", "协作", "复盘", "跨学科", "融合",
-    "核心竞争力", "你的优点", "你的长处", "比别人强在哪"
-  ],
-  answer: `我认为自己有三大核心能力：
-
-① 跨学科融合的自驱力——汉语言文学背景给了我很好的共情能力和文字表达能力，同时我又能用 Vibe Coding 独立完成产品，不因专业设限。
-
-② 沟通协作与用户共情——在泰瓴和去哪儿实习时都证明了这一点，习惯站在用户视角挖掘真实痛点。
-
-③ 复盘与迭代思维——坚持日常复盘，形成"执行→反思→改进"的正向循环。
-
-您看咱们从哪个深入聊？`,
-  quickReplies: ['展开讲讲','聊聊实习','聊项目']
-});
-
-// 14. 缺点/不足（已修改为“不到一个学期”）
-QA_DB.push({
-  id: "weakness",
-  keywords: [
-    "缺点", "不足", "劣势", "弱点", "短板", "有待提升", "最大不足",
-    "最大劣势", "最弱", "不够好", "需要改进", "你的缺点"
-  ],
-  answer: `我最需要补的是技术深度。虽然我用 Vibe Coding 能独立交付产品，但遇到底层性能问题或复杂算法时，我还是需要 AI 来帮我写代码，自己没法独立解决。
-
-不过我在用行动弥补——从中文系到能用 AI 编程做小程序，只用了不到一个学期。如果拿到这个实习机会，我希望能在真实的工程环境里，把"会用 AI 写代码"升级成"自己能写一部分代码，AI 帮我加速剩下部分"。
-
-您觉得这个岗位最需要什么样的技术深度？`,
-  quickReplies: ['说说你的优势','聊项目','谈谈学习能力']
-});
-
-// 15. 反问 HR
-QA_DB.push({
-  id: "ask_hr",
-  keywords: ["有什么问题","反问","想问","了解团队","OKR","挑战","成长","打开局面","有什么要问"],
-  answer: `我想问三个问题：
-
-1. 这个 AI 产品实习岗位目前最大的挑战是什么？是模型能力边界、用户需求识别、还是团队协作节奏？
-
-2. 团队最近一个季度的 OKR 重点是什么方向？我可以从哪个切入点更快创造价值？
-
-3. 在你们团队，一个实习生做到什么样算"打开局面"？有没有印象最深的实习生案例？`,
-  quickReplies: ['说说你的理解','聊聊你的优势','谈项目']
-});
-
-// 16. 职业规划/动机
-QA_DB.push({
-  id: "motivation",
-  keywords: [
-    "为什么选择AI产品", "求职动机", "职业目标", "为什么做产品", "产品观",
-    "初心", "产品思维", "理念", "为什么来", "为什么想当产品经理"
-  ],
-  answer: `我选择 AI 产品方向，核心是相信产品思维可以跨越介质。我做小红书运营时，就是在用产品思维做内容——定义用户、验证假设、数据迭代。后来发现 AI 工具可以帮我把这种思维从内容延伸到代码。
-
-产品是一个通用的观念。我们学习、进步，本质上也是在磨炼产品——产品可以是人、可以是物品、可以是事情。用产品思维去对待人生，会越来越好。
-
-所以我不觉得自己是"跨界"，而是把"把一件事做成好产品"这件事从内容做到了代码。`,
-  quickReplies: ['说说实习','聊项目','谈谈产品观']
-});
-
-// 17. 抗压/加班
-QA_DB.push({
-  id: "pressure",
-  keywords: ["加班","抗压","压力","强度","适应","996","高强度"],
-  answer: `我觉得能做好产品的人，应该是对结果有执念的人，而不是对时间有执念的人。我做过运营，知道数据波动时那种焦虑感；也做过 AI 评测，知道一次错误输出引发多轮返工的连锁成本。
-
-我接受高强度的工作节奏，前提是能清晰地看到目标和反馈。我也很认同"上游治理，减少下游返工"的方法论——与其花时间修 bug，不如花时间想清楚怎么不产生 bug。
-
-这个实习岗位如果有特定的节奏要求，欢迎联系我本人细聊。`,
-  quickReplies: ['聊聊实习','谈项目','说说你的优势']
-});
-
-// 18. 是否 AI 分身
-QA_DB.push({
-  id: "is_ai",
-  keywords: ["AI","机器人","分身","数字","你是","真的","本人","真人","人工智能"],
-  answer: `我是 winnie 的 AI 数字分身，基于她的完整简历和真实经历训练。所有信息都真实可核对，欢迎您直接跟她本人验证——手机/微信 19298915379。
-
-您可以把我当成一个 7x24 小时在线的"第一轮面试官"，先跟我聊完，觉得合适再约真人面谈。`,
-  quickReplies: ['自我介绍','聊聊项目','说说实习']
-});
-
-// 19. 学生工作
-QA_DB.push({
-  id: "student",
-  keywords: ["学生工作","干事","青年发展","审核部","到梦空间","评优","荣誉","社团"],
-  answer: `我在学校青年发展中心的项目审核部做过一年干事，负责全校"到梦空间"活动的最终审核，指导校内各级组织开展活动。这段经历让我系统了解了各类活动的设计逻辑，也锻炼了审核把关能力。
-
-年度评优时获评了"优秀学生干事"。
-
-另外我也是班级读书会的成员，每月精读一本书，写过读书会新闻稿入选公众号展示。这些事虽然不大，但让我一直保持着"输入→输出"的习惯。`,
-  quickReplies: ['聊聊项目','说说实习','自我介绍']
-});
-
-// 20. 作品集网站
-QA_DB.push({
-  id: "portfolio",
-  keywords: ["作品集","网站","portfolio","my-website","个人网站","作品集网站","作品集链接","看作品集"],
-  answer: `我的作品集网站是用 Vibe Coding 独立搭建的，集中展示了我的 PRD、竞品分析报告、Axure 原型、业务流程图和项目经历。
-
-🔗 作品集链接：https://chocolatewin.github.io/my-website/
-📱 小程序项目集：https://chocolatewin.github.io/PM-Portfolio/
-
-设计时我站在 HR 视角，做了清晰的信息层级和浏览动线，目的是降低招聘方的信息获取成本。里面每个项目都有完整的文档，欢迎慢慢看。`,
-  quickReplies: ['聊项目','说说技术实现','聊聊实习']
-});
-
-// 21. 用户反馈
-QA_DB.push({
-  id: "feedback",
-  keywords: ["用户反馈","反馈","评论","用户怎么说","效果","数据","日活","用户"],
-  answer: `目前小程序的反馈主要集中在：用户觉得"15 个引导式锚点"帮助很大，不再对着空白框发呆。有用户说"以前写读书笔记要憋半天，现在跟着锚点走，5 分钟就能写一段"。
-
-数据上，核心模块的完成率比我预期的要高，说明"降低表达门槛"这个产品假设是成立的。当然，目前还在早期阶段，我在持续收集反馈做迭代。
-
-您可以看看作品集里的完整数据复盘：https://chocolatewin.github.io/my-website/`,
-  quickReplies: ['聊项目','说说技术实现','看作品集']
-});
-
-// 22. 看作品集（专门处理“看”）
-QA_DB.push({
-  id: "view_portfolio",
-  keywords: ["看","看作品集","要看吗","想看看","链接","作品集","看看"],
-  answer: `当然可以！我的作品集在这里👇
-
-🔗 作品集网站（含 PRD、Axure 原型、竞品分析）：https://chocolatewin.github.io/my-website/
-📱 小程序项目集：https://chocolatewin.github.io/PM-Portfolio/
-
-建议先看作品集网站，那里有完整的项目文档和设计过程。看完有任何问题，欢迎随时问我。`,
-  quickReplies: ['聊项目','说说实习','AI产品理解']
-});
-
-// 23. 什么是 Vibe Coding
-QA_DB.push({
-  id: "vibe",
-  keywords: ["Vibe Coding","TRAE","AI编程","自然语言驱动","vibe","TRAE工具","什么是Vibe Coding"],
-  answer: `Vibe Coding 是一种用自然语言驱动 AI 编程工具来生成代码的开发方式。我用的具体工具是 TRAE。
-
-使用流程是：我用自然语言描述需求 → TRAE 生成代码 → 我进行调试和优化，并补充上下文让 AI 产出更准确的代码。这个过程中，我需要清晰地拆解功能、调整 Prompt、细化需求，引导 AI 产出可用的代码。
-
-【输出第一】小程序和作品集网站都是这么做的。这让我验证了"大模型能力边界 × 用户需求"的匹配方式。`,
-  quickReplies: ['技术怎么实现的','说说实习','看作品集']
-});
-
-// 24. 上游治理是什么
-QA_DB.push({
-  id: "upstream",
-  keywords: ["上游治理","前置协议","约束协议","上游"],
-  answer: `"上游治理"是我在泰瓴未来实习时总结出来的方法论——在问题产生之前就把风险控制住，而不是等出问题后再去修。
-
-具体来说：在设计 AI 产品时，我们通过 Prompt 框架、约束协议、评测标准在源头就把问题拦住，而不是等后端人工去返工。比如，我们用 EEAT 框架 + 7 维度标准在评测阶段就把 AI 产出的质量问题卡住，让不合格的输出根本流不到下游。
-
-好产品永远是设计出来的，不是修出来的。`,
-  quickReplies: ['说说泰瓴','聊聊项目','谈谈方法论']
-});
-
-// 25. 确认词/通用追问
-QA_DB.push({
-  id: "confirm",
-  keywords: ["可以","好的","嗯","行","好","ok","OK","是的","对","没错","嗯嗯","好呀","可以啊","继续","然后呢","然后","接着说"],
-  answer: `好的，您想深入了解哪个方面？我可以展开聊聊：
-
-• 小程序的技术实现细节
-• 实习的方法论总结（上游治理）
-• 我的产品观和 AI 理解
-• 小红书运营的数据驱动方法
-
-您直接告诉我具体话题就好，比如"技术实现"或"方法论"。`,
-  quickReplies: ['技术实现','方法论','产品观','小红书']
-});
-
-// ============================================================
-// 新增常见面试问题条目
-// ============================================================
-
-// 26. 项目难点
-QA_DB.push({
-  id: "project_challenge",
-  keywords: ["项目难点","挑战","踩坑","困难","遇到什么问题","怎么解决的"],
-  answer: `做【输出第一】小程序时，最大的挑战是**引导式锚点的设计**——既要让用户有方向，又不能限制他们的表达自由。
-
-我最初设计了 20 个锚点，测试后发现用户觉得太冗长，于是砍到 15 个，并增加了“自定义书评”模块，让用户既能跟着走，也能自己发挥。
-
-另一个挑战是**与 AI 编程工具的协作**——刚开始 TRAE 生成的代码经常有 bug，我需要不断调整 Prompt、补充上下文，才能得到可用的代码。这个过程让我真正理解了“大模型能力边界”的含义。`,
-  quickReplies: ['技术怎么实现的','用户反馈','聊项目']
-});
-
-// 27. 实习收获
-QA_DB.push({
-  id: "internship_harvest",
-  keywords: ["实习收获","学到什么","成长","感悟"],
-  answer: `最大的收获是**从“执行者”变成“设计者”**。
-
-在泰瓴未来，我不只是执行 AI 评测任务，而是参与了 Prompt 框架的设计、评测标准的制定，甚至独立负责了产品网页的决策。这让我意识到，产品经理不是“传话筒”，而是“翻译器”——把技术语言翻译成用户价值。
-
-另外，我养成了**飞书日报复盘的习惯**，每天记录做了什么、卡在哪、怎么解决。这个习惯让我成长很快。`,
-  quickReplies: ['说说泰瓴','聊聊项目','谈谈能力']
-});
-
-// 28. 团队协作经历
-QA_DB.push({
-  id: "teamwork",
-  keywords: ["团队","协作","合作","配合","协同","沟通","跨部门"],
-  answer: `在泰瓴未来，我和技术团队配合完成了“前置协议约束”方案的落地，从产品侧提出需求，到技术侧评估可行性，最后一起推动上线。
-
-在去哪儿，我协同运营、数据等多个方向的同事推进区域项目，做了 20+ 组分人群的运营地面拓展。
-
-我觉得好的沟通不是“会说”，而是“听得懂对方的需求，然后用对方能理解的方式回应”——这个能力在做产品时尤其重要。`,
-  quickReplies: ['说说实习','聊项目','谈谈优势']
-});
-
-// ============================================================
-// 第三部分：对话上下文
-// ============================================================
-const ChatContext = {
-  history: [],
-  currentTopic: null,
-  push(userMsg, answer, topic) {
-    this.history.push({ user: userMsg, answer, topic });
-    if (this.history.length > 4) this.history.shift();
-    if (topic) this.currentTopic = topic;
-  },
-  getLastTopic() {
-    if (this.history.length > 0) return this.history[this.history.length-1].topic;
-    return null;
-  },
-  getRecentTopics() {
-    return this.history.map(h => h.topic).filter(Boolean);
-  },
-  clear() {
-    this.history = [];
-    this.currentTopic = null;
-  }
-};
-
-// ============================================================
-// 第四部分：匹配算法（增加精确匹配前置）
-// ============================================================
-function matchQuestion(userMsg) {
-  const lower = userMsg.trim().toLowerCase();
-  
-  // 先尝试精确匹配快捷按钮文字
-  const exactMatchMap = {
-    '自我介绍': 'self_intro',
-    '实习经历': 'internship',
-    '项目作品': 'project',
-    'ai产品理解': 'ai_understanding',
-    '教育背景': 'education',
-    '看作品集': 'portfolio',
-    '用户反馈': 'feedback',
-    '技术实现': 'tech_impl',
-    '什么是vibe coding': 'vibe',
-    '上游治理是什么': 'upstream',
-    '泰瓴未来': 'tailing',
-    '去哪儿': 'qunar',
-    '网易有道': 'wangyi',
-    '佰司特': 'baosite',
-    '展开讲讲': 'confirm',
-    '聊聊项目': 'project',
-    '说说实习': 'internship',
-    '谈谈能力': 'ability',
-    '聊项目': 'project',
-    '看作品集': 'view_portfolio',
-    '说说你的优势': 'ability',
-    '谈谈学习能力': 'ability',
-    '你的优点': 'ability',
-    '你的缺点': 'weakness'
-  };
-  if (exactMatchMap[lower]) {
-    const target = QA_DB.find(q => q.id === exactMatchMap[lower]);
-    if (target) return { qa: target, score: 999 };
-  }
-
-  // 否则走模糊匹配
-  let bestMatch = null;
-  let bestScore = 0;
-
-  for (const qa of QA_DB) {
-    let score = 0;
-    for (const kw of qa.keywords) {
-      if (lower.includes(kw.toLowerCase())) {
-        score += 1;
-      }
-    }
-    if (score > 0) {
-      const lastTopic = ChatContext.getLastTopic();
-      if (lastTopic) {
-        for (const kw of qa.keywords) {
-          if (lastTopic.includes(kw) || kw.includes(lastTopic)) {
-            score += 1;
-            break;
-          }
+    // ================================================================
+    //  1. 知识库（28 个问答条目，全部口语化）
+    // ================================================================
+
+    const KNOWLEDGE_BASE = {
+
+        // ---------- 1. 自我介绍 ----------
+        self_intro: {
+            q: ['介绍你自己', '自我介绍一下', '你是谁', '简单介绍', '说说你自己'],
+            a: `哈喽，我是 Winnie，兰州大学汉语言文学专业 28 届毕业生。
+    我自己对 AI 产品方向特别感兴趣，过去一年做了不少跟 AI 相关的实践——
+    从 AI 内容评测、Prompt 调优，到用 Vibe Coding 独立开发小程序，再到最近做了一个 AI 面试分身 Agent。
+    我性格比较外向，喜欢跟人打交道，在团队里算是能推动事情往前走的那种人。
+    产品经理这个岗位吸引我的地方，就是能把模糊的需求变成可落地的方案。
+    你对我哪段经历感兴趣？我们可以深入聊聊。`,
+            buttons: ['聊聊实习经历', '说说AI项目', '你平时怎么学习的']
+        },
+
+        // ---------- 2. 教育背景 ----------
+        education: {
+            q: ['你是哪个学校的', '学什么专业', '学历背景', '哪毕业的'],
+            a: `我是兰州大学汉语言文学专业的，28 届毕业生。
+    很多人会觉得文科生做产品经理有壁垒，但我觉得恰恰相反——
+    汉语言训练的是文本理解和精准表达，写 PRD 的时候能把需求讲清楚、讲明白，这个能力其实很关键。
+    而且文学本质上就是在理解人、理解情感，做产品也一样，要共情用户。
+    当然我也知道自己缺技术背景，所以课余自己补了 SQL，学了 Axure，还上手做了好几个项目。
+    我觉得专业只是起点，关键是你愿意走多远。`,
+            buttons: ['你补了哪些技能', '做产品有什么优势', '聊聊你的项目']
+        },
+
+        // ---------- 3. 泰瓴未来实习 ----------
+        taifu: {
+            q: ['泰瓴未来实习', '增长策略实习', '你做了什么实习', 'AI评测实习', '第一段实习', '泰瓴'],
+            a: `我在泰瓴未来做的是策略增长实习生，主要工作是 AI 内容评测和 Prompt 调优。
+    当时业务方需要 AI 批量生成 B2B 行业文章，但 AI 产出的内容质量参差不齐。
+    我的工作就是用 EEAT 质量框架 + 7 个维度去审核每一篇内容，看相关性、真实性、业务匹配度等等。
+    这个过程中我发现了一个核心问题：AI 写出来的东西跟决策人的真实背景对不上，导致修改率特别高。
+    后来我就配合团队优化了 Prompt 框架，用思维链的方式去引导 AI，让内容更贴合实际业务需求。
+    简单说，就是先把逻辑拆清楚，再让 AI 按照这个逻辑去生成，效果好了很多。
+    这段实习让我对 AI 的能力边界有了真实的理解，也知道了“评测”这件事有多重要。`,
+            buttons: ['具体怎么优化Prompt的', '你学到了什么', '再来一段实习']
+        },
+
+        // ---------- 4. 去哪儿旅行实习 ----------
+        qunar: {
+            q: ['去哪儿实习', '去哪儿旅行', '第二段实习', '小红书运营实习', '在去哪儿做什么'],
+            a: `我在去哪儿旅行做的是小红书运营实习生，虽然 title 是运营，但我实际上做了很多偏产品的事。
+    我独立监控 8 个账号的日度数据，看 6 个核心指标，然后拉表格、做分析，给团队提供决策依据。
+    还主导了 20 多个细分人群的运营阵地搭建，梳理用户画像，建内容模板和标签机制，做“用户和内容”的精准匹配。
+    另外还参与了一个华东区域的数据项目，把去哪儿 APP 的榜单数据和外部流量数据做交叉验证，提炼热点和选题方向。
+    这段经历让我对数据敏感度有了很大的提升，也知道了怎么通过数据发现问题。`,
+            buttons: ['具体怎么分析数据的', '遇到最大的挑战', '你有什么收获']
+        },
+
+        // ---------- 5. 小红书个人账号 ----------
+        xhs: {
+            q: ['小红书账号', '个人小红书', '自媒体运营', '爆款笔记', '你运营过小红书'],
+            a: `对，我自己运营了一个小红书账号，定位是干货分享类，从 0 开始做到现在累计获赞 3 万。
+    从选题策划、文案撰写到排版视觉，全流程自己搞定。
+    我觉得这段经历给我最大的收获是：你要真正理解你的用户在想什么，才能做出他们愿意看的内容。
+    我也通过评论区互动和私信收集了很多用户反馈，然后不断调整选题方向，形成了一个“发布→数据→迭代”的闭环。
+    这跟做产品其实是一样的逻辑——先假设，再验证，再优化。`,
+            buttons: ['你是怎么找到选题方向的', '遇到过瓶颈吗', '你觉得用户运营最难的是什么']
+        },
+
+        // ---------- 6. 输出第一小程序 ----------
+        output_first: {
+            q: ['输出第一', '小程序', '你做的产品', '做过什么项目', '产品项目', '独立开发'],
+            a: `我做过一个叫「输出第一」的小程序，是一个阅读和观影记录工具。
+    当时我发现豆瓣、微信读书这些产品都有一个共同的问题：用户面对空白输入框，不知道怎么表达，输出意愿特别低。
+    所以我设计了 15 个引导式锚点，比如“读完这本书你最大的感受是什么”“哪个场景让你印象最深”，让用户有点可点、有话可说。
+    我用 TRAE 协作完成开发，从需求描述、功能拆解到代码生成、调试修正，完整跑了一遍 Vibe Coding 的工作流。
+    PRD、竞品分析、流程图、Axure 高保真原型，这些我都完整做过一遍，放在作品集里了。`,
+            buttons: ['你用AI怎么开发的', '功能设计有哪些考虑', '数据表现怎么样']
+        },
+
+        // ---------- 7. Agent 项目 ----------
+        agent: {
+            q: ['agent', '面试分身', 'AI agent', '自己搭过agent', '智能体', 'Winnie AI'],
+            a: `嗯！我最近做了一个叫「Winnie AI 面试分身」的 Agent。
+    我发现一个痛点：HR 看简历只能看到文字，没办法快速感知候选人的真实沟通风格和思维深度。
+    所以我就做了一个对话式的 Agent，让 HR 点开链接就能像聊天一样了解我。
+    技术上是纯前端，HTML+CSS+JS，部署在 GitHub Pages，不需要服务器和数据库，完全免费。
+    知识库有 28 个问答条目，覆盖了自我介绍、实习经历、核心项目、AI 理解、综合素质等 7 大类。
+    它有几个核心能力：多轮对话记忆、加权意图匹配、主动引导追问、分级兜底逻辑。
+    这个项目上线后，我自己也测试了很多轮，效果还不错。`,
+            buttons: ['技术难点是什么', '用户反馈怎么样', '接下来打算怎么优化']
+        },
+
+        // ---------- 8. SQL 技能 ----------
+        sql: {
+            q: ['sql', '你会sql吗', '数据分析能力', '数据工具', '会不会sql'],
+            a: `SQL 这块我是自学的。主要是在牛客网上刷题，边看课程边练习，从简单查询到多表连接、子查询、聚合函数这些，一步步来的。
+    虽然说不上精通，但基础的查询和分析我是能独立完成的。
+    我在去哪儿实习的时候也用过 SQL 来拉数据、做分析，所以不是纯理论，是有实战场景的。
+    我觉得学工具的核心是“先看再上手”，快速试错，在实践中验证。`,
+            buttons: ['你还会什么工具', '怎么学的', '具体怎么应用到工作中的']
+        },
+
+        // ---------- 9. Axure / Figma 技能 ----------
+        design_tools: {
+            q: ['axure', 'figma', '原型工具', '会画原型吗', '产品工具'],
+            a: `Axure 和 Figma 我都能用，主要用的还是 Axure。
+    学习方法跟 SQL 一样：先看课程，搞清楚功能模块是干什么的，然后直接上手做项目。
+    做「输出第一」小程序的时候，我完整的画了业务流程图和高保真可交互原型，边做边学，碰到不会的就查。
+    Figma 我也能上手，逻辑和 Axure 是通的，切换起来很快。
+    我的方法论就是：先看，然后立刻上手做，不拖。`,
+            buttons: ['能看看你画的原型吗', '还有什么工具', '那你学习能力应该很强']
+        },
+
+        // ---------- 10. 为什么做产品 ----------
+        why_pm: {
+            q: ['为什么做产品经理', '为什么选择产品', '产品经理吸引你的地方', '职业规划'],
+            a: `我觉得产品经理最吸引我的地方是——它是一个“把模糊的东西变清晰”的过程。
+    业务方可能只说了个大概方向，你要去拆解、去调研、去思考，然后变成一份 PRD、一张原型图、一个可落地的方案。
+    而且做产品本质上是在理解人——理解用户想要什么、痛点在哪里、怎么帮他们解决问题。
+    我是汉语言文学专业的，对人的情感和需求有天然的敏感度，这个我觉得是加分项。
+    另外，我性格上也偏外向，喜欢推动事情往前走，不是那种坐着等安排的人。产品经理这个角色很适合我。`,
+            buttons: ['你觉得做产品最重要的能力是什么', '你有过什么失败经历', '对未来有什么规划']
+        },
+
+        // ---------- 11. 最大优势 ----------
+        strength: {
+            q: ['你的优势', '优点是什么', '凭什么胜任', '核心竞争力'],
+            a: `我觉得我的优势有三个：
+    第一，我动手能力比较强。想到什么就会去做，不会停留在“我想做”的阶段。从做小程序到搭 Agent，都是先做了再说。
+    第二，我不给自己设限。汉语言专业的背景没有让我觉得“我不能做技术相关的产品”，反而我会主动去补 SQL、学 Axure、玩 AI 工具。
+    第三，我有闭环意识。不管是实习还是做项目，我都会复盘、沉淀、迭代。之前实习的时候坚持写日报，这个习惯一直留着，对我帮助很大。`,
+            buttons: ['举一个闭环的例子', '那你有缺点吗', '你是怎么学习的']
+        },
+
+        // ---------- 12. 缺点 ----------
+        weakness: {
+            q: ['缺点', '不足', '需要改进的地方', '短板'],
+            a: `我觉得我最大的短板是技术深度还不够。
+    虽然我学了 SQL，会用 Axure，也有 Vibe Coding 的经验，但跟计算机专业的同学比，底层原理确实没那么扎实。
+    不过我不觉得这个是死穴——我一直在补，而且产品经理的核心是理解用户和业务，技术是用来协作和沟通的。
+    我自己也在通过做项目和搭 Agent 不断地往前跑，相信我能在实践中快速补齐这块。`,
+            buttons: ['你打算怎么补技术', '那你觉得自己能胜任吗', '你的学习方式是什么']
+        },
+
+        // ---------- 13. 学习方法 ----------
+        learning: {
+            q: ['你怎么学习的', '学习方式', '如何学习', '你的学习方法'],
+            a: `我的学习方法其实挺简单的：先看，然后立刻上手做。
+    SQL 是看课程 + 刷题，Axure 是看课程 + 画原型，Vibe Coding 是直接上手跟 TRAE 协作写代码。
+    我比较信奉“在实践中学习”这个理念——你看了再多教程，不亲手做一遍，还是会卡在第一个坑里。
+    实习的时候我也是这样，边做边问边复盘，每天写日报逼自己总结。
+    我觉得快速学习的能力比已经会什么更重要。`,
+            buttons: ['你最近在学什么', '怎么保持学习动力', '推荐一个学习方法']
+        },
+
+        // ---------- 14. 抗压能力 ----------
+        pressure: {
+            q: ['抗压', '怎么应对压力', '压力大的时候', '处理压力', '遇到困难'],
+            a: `我觉得抗压能力是一个积累的过程，不是天生的。
+    实习的时候，监控 8 个账号的数据，每天都要拉表、分析、出结论，时间紧、任务重，那段时间确实压力很大。
+    但我后来养成了一个习惯：先把事情拆开看，一个一个解决，而不是盯着“好难”这个感觉。
+    另外我也会自己调节节奏——该干活的时候专注干活，该休息的时候不硬撑。
+    我觉得关键是要对自己有清晰的认知，知道什么事情自己能扛，什么事情需要求助。`,
+            buttons: ['举一个具体的例子', '你是怎么调节的', '那你的执行力怎么样']
+        },
+
+        // ---------- 15. 团队协作 ----------
+        team: {
+            q: ['团队协作', '怎么跟人合作', '跨部门沟通', '协作能力', '跟技术配合'],
+            a: `我平时跟人打交道比较自然，不是那种“社恐”的类型。
+    在增长策略实习的时候，我需要跟技术团队配合，把“前置协议约束”的方案落地，当时是反复沟通需求、对齐预期，最后才推上去的。
+    在去哪儿的时候，跟运营、数据、产研好几个角色一起推进区域项目，也挺锻炼人的。
+    我觉得跨团队协作的核心就两点：一是把需求讲清楚，二是对齐目标——大家知道做这件事是为了什么，配合起来就顺畅很多。`,
+            buttons: ['遇到分歧怎么处理', '你怎么跟技术同学沟通', '你更喜欢独立工作还是团队']
+        },
+
+        // ---------- 16. 对AI的理解 ----------
+        ai_understanding: {
+            q: ['你怎么理解AI', '对AI的看法', 'AI产品经理', '大模型理解', '你怎么看大模型'],
+            a: `我觉得 AI 目前最大的价值不是“替代人”，而是“提升人的效率”——把重复的事情交给机器，把创造性的部分留给人。
+    我对 AI 的理解更多是从“应用落地”的角度出发：AI 能不能真正解决业务问题？能不能让用户的体验变得更好？
+    我自己在实习和做项目的过程中，其实一直在探索这个：通过 Prompt 调优让 AI 产出更可用的内容，通过 Vibe Coding 让 AI 辅助我完成编码。
+    我觉得 AI 产品经理的核心能力，就是知道 AI 能做什么、不能做什么，然后找到技术与用户需求的交叉点。`,
+            buttons: ['你觉得AI会取代产品经理吗', '你用AI做过什么', '未来AI产品的发展方向']
+        },
+
+        // ---------- 17. 大模型课程 ----------
+        llm_course: {
+            q: ['上过什么课', 'AI课程', '大模型课程', '学过AI吗'],
+            a: `我在学校修过 AI 大模型相关的课程，对 RAG、微调这些核心概念有系统性的了解。
+    加上我平时自己也会看论文和技术报告，保持对行业动态的关注。
+    我觉得产品经理不一定需要懂怎么训练模型，但一定要懂模型能做什么、不能做什么，这样才能在产品和算法之间搭好桥。`,
+            buttons: ['你还会继续学吗', '推荐一个学习方法', '那你觉得懂技术重要吗']
+        },
+
+        // ---------- 18. 作品集 ----------
+        portfolio: {
+            q: ['作品集', '能看看你的作品吗', '展示一下', '有什么作品', '哪里看项目'],
+            a: `当然可以！我的作品集网站在这里：
+    https://chocolatewin.github.io/my-website/
+    里面有「输出第一」小程序的完整 PRD、竞品分析报告、Axure 高保真原型、业务流程图，还有这个 Agent 项目的介绍。
+    点开就能看，比我说得更清楚。`,
+            buttons: ['你做了哪些项目', '哪个项目最满意', '还有什么想展示的吗']
+        },
+
+        // ---------- 19. 反问面试官 ----------
+        ask_hr: {
+            q: ['你有什么想问我的', '反问', '你问面试官', '你有什么问题'],
+            a: `好呀，我想问：
+    1. 这个岗位日常的工作节奏大概是怎样的？会参与到产品的哪些环节？
+    2. 团队目前在做的事情里，最让你有成就感的是什么？
+    3. 你对这个岗位的实习生有什么期待？
+    期待听到你的分享！`,
+            buttons: ['好的了解了', '那你们团队氛围怎么样', '谢谢回答']
+        },
+
+        // ---------- 20. 职业规划 ----------
+        career_plan: {
+            q: ['职业规划', '未来规划', '以后想做什么', '长远计划'],
+            a: `短期来说，我希望能在 AI 产品方向积累更多实战经验，特别是 Agent 和 AI 应用层产品。
+    我不怕从基础做起，关键是能接触到真实业务、能跟着项目跑完一个完整周期。
+    长期来说，我希望自己能成为一个真正理解用户、懂产品、能把 AI 落地到实际场景中的产品经理。
+    我不想做那种只会写 PRD 的工具人，而是能推动事情往前走的人。`,
+            buttons: ['那你为什么选AI方向', '你觉得这个岗位适合你吗', '你还有别的规划吗']
+        },
+
+        // ---------- 21. 学生工作 ----------
+        student_work: {
+            q: ['学生工作', '社团经历', '项目审核部', '优秀学生干事', '校园经历'],
+            a: `我在大学期间参加过项目审核部，负责活动的审批和全程监督。
+    这个经历挺锻炼人的——要从需求收集、方案评审到落地跟进，全程跟进闭环。
+    因为工作比较认真，还拿了优秀学生干事的荣誉。
+    这段经历让我养成了“有始有终”的习惯，做事情会有闭环意识，不会虎头蛇尾。`,
+            buttons: ['具体做什么的', '有什么收获', '你怎么平衡学习和工作']
+        },
+
+        // ---------- 22. 数据敏感度 ----------
+        data_sense: {
+            q: ['数据敏感度', '怎么理解数据', '对数据敏感吗', '你怎么看数据'],
+            a: `我觉得数据敏感度不是天生的，是练出来的。
+    在去哪儿实习的时候，我每天都要看 8 个账号、6 个核心指标的数据，时间长了就慢慢能看出来“这个数据不对”“这个趋势有问题”。
+    我自己也总结了一套方法：先看整体趋势，再看异常值，然后找原因，最后提出建议。
+    数据不是冷冰冰的数字，它是用户在用脚投票的结果。`,
+            buttons: ['举个例子', '你用什么工具做数据分析', '数据重要还是直觉重要']
+        },
+
+        // ---------- 23. 为什么选AI方向 ----------
+        why_ai: {
+            q: ['为什么选AI方向', '对AI感兴趣的原因', 'AI吸引你的地方', '为什么做AI产品'],
+            a: `我觉得 AI 是目前最有可能重塑整个互联网产品形态的技术。
+    从搜索到推荐到对话式交互，AI 在改变用户和产品之间的互动方式。
+    我特别想做的是“应用层”的 AI 产品——不是训练模型，而是把模型的能力变成用户真正能用、愿意用的产品功能。
+    而且我自己在用 AI 工具的时候，经常会想“这个功能如果这样设计会不会更好”，这种冲动让我觉得我应该来做这件事。`,
+            buttons: ['你觉得AI产品最大的挑战是什么', '你最喜欢哪个AI产品', '你平时用什么AI工具']
+        },
+
+        // ---------- 24. 自我介绍（短版，用于开头） ----------
+        welcome: {
+            q: ['start'],
+            a: `你好！我是 Winnie 的 AI 面试分身 👋
+
+    你可以把我当成 Winnie 本人来聊。
+    我熟悉她的简历、项目、实习经历和 AI 理解。
+    你问我任何跟求职相关的问题，我会像她本人一样回答。
+
+    随便问，不用拘束～ 你感兴趣的方向、她的思考方式、做过的项目，都可以聊。
+
+    或者你也可以直接点下面的按钮开始 👇`,
+            buttons: ['介绍一下你自己', '你有什么项目经历', '你做过哪些实习']
+        },
+
+        // ---------- 25. 英语能力 ----------
+        english: {
+            q: ['英语', '英语水平', '六级', '英语能力', 'English'],
+            a: `我英语已经过了六级，高考英语 135+，日常的英文文档阅读和基础书面沟通都没有问题。
+    做产品经理有时候需要看一些国外的产品动态和行业报告，这块我可以独立完成。
+    面试的时候如果需要英语交流，我也是可以的，可能会比母语者慢一点点，但沟通没有问题。`,
+            buttons: ['你平时怎么看英文资料', '英语对产品经理重要吗', '还有什么想说的']
+        },
+
+        // ---------- 26. 计算机二级 ----------
+        computer_level2: {
+            q: ['计算机二级', '二级', '计算机等级', 'office技能'],
+            a: `我过了计算机二级，对 Office 这一套工具还是比较熟的。
+    平时写文档、做表格、整理数据，用 Word、Excel 这些都很顺手。
+    我觉得产品经理不一定需要会写代码，但基本的工具素养还是要有——能把想法清晰地表达出来、能自己拉数据做分析，这些都是基础能力。`,
+            buttons: ['你还用什么工具', '你还会哪些技能', '怎么学的二级']
+        },
+
+        // ---------- 27. 看网文 ----------
+        novel: {
+            q: ['看网文', '番茄小说', '小说', '喜欢什么书', '阅读习惯'],
+            a: `我平时还挺喜欢看网文的，番茄小说、晋江这些平台都会逛。
+    我觉得做内容型产品的产品经理，最好自己就是用户——你才能理解用户为什么会在这个页面停留、为什么会在那个地方划走。
+    读网文对我来说也是一种观察用户行为的方式：什么样的内容能让人一直往下翻、什么样的互动能留住人。这些都是做内容产品的直觉来源。`,
+            buttons: ['你最喜欢哪个平台', '那你怎么看番茄小说这个产品', '你喜欢看什么类型']
+        },
+
+        // ---------- 28. 兜底（软） ----------
+        fallbackWeak: {
+            a: `这块我暂时没有准备到具体案例，不过我在相关经历里做过类似的事情。你可以换一个角度问，比如问我实习里最难忘的一件事、或者我对 AI 产品的理解，我都可以跟你聊聊。`,
+            buttons: ['那说说你的实习吧', '你对AI产品怎么看', '你有什么项目经验']
+        },
+
+        // ---------- 29. 兜底（硬） ----------
+        fallbackHard: {
+            a: `这块 Winnie 没有跟我细聊，所以我暂时没法给你一个满意的答案。
+    不过你可以直接联系 Winnie 本人，她的联系方式是：
+    📞 19298915379
+    📧 32203783@qq.com
+    相信她能给你一个更完整的解答。😊`,
+            buttons: ['好的，我去看看', '那你还有什么能聊的', '她一般什么时候回消息']
         }
-      }
-      if (lower.includes('这个') || lower.includes('那个') || lower.includes('它')) {
-        const lastTopic = ChatContext.getLastTopic();
-        if (lastTopic) {
-          for (const kw of qa.keywords) {
-            if (lastTopic.includes(kw) || kw.includes(lastTopic)) {
-              score += 1;
-              break;
+    };
+
+
+    // ================================================================
+    //  2. 对话引擎
+    // ================================================================
+
+    // ---------- 快捷按钮映射 ----------
+    const BUTTON_ACTION_MAP = {
+        '介绍一下你自己': 'self_intro',
+        '你有什么项目经历': 'output_first',
+        '你做过哪些实习': 'taifu',
+        '聊聊实习经历': 'taifu',
+        '说说AI项目': 'agent',
+        '你平时怎么学习的': 'learning',
+        '你补了哪些技能': 'sql',
+        '做产品有什么优势': 'why_pm',
+        '聊聊你的项目': 'output_first',
+        '具体怎么优化Prompt的': 'prompt_detail',
+        '你学到了什么': 'why_pm',
+        '再来一段实习': 'qunar',
+        '具体怎么分析数据的': 'data_sense',
+        '遇到最大的挑战': 'pressure',
+        '你有什么收获': 'strength',
+        '你是怎么找到选题方向的': 'xhs',
+        '遇到过瓶颈吗': 'weakness',
+        '你觉得用户运营最难的是什么': 'team',
+        '你用AI怎么开发的': 'agent',
+        '功能设计有哪些考虑': 'output_first',
+        '数据表现怎么样': 'data_sense',
+        '技术难点是什么': 'llm_course',
+        '用户反馈怎么样': 'portfolio',
+        '接下来打算怎么优化': 'career_plan',
+        '你还会什么工具': 'design_tools',
+        '怎么学的': 'learning',
+        '具体怎么应用到工作中的': 'taifu',
+        '能看看你画的原型吗': 'portfolio',
+        '还有什么工具': 'design_tools',
+        '那你学习能力应该很强': 'learning',
+        '你觉得做产品最重要的能力是什么': 'why_pm',
+        '你有过什么失败经历': 'weakness',
+        '对未来有什么规划': 'career_plan',
+        '举一个闭环的例子': 'strength',
+        '那你有缺点吗': 'weakness',
+        '你是怎么学习的': 'learning',
+        '你打算怎么补技术': 'weakness',
+        '那你觉得自己能胜任吗': 'strength',
+        '你的学习方式是什么': 'learning',
+        '你最近在学什么': 'learning',
+        '怎么保持学习动力': 'learning',
+        '推荐一个学习方法': 'learning',
+        '举一个具体的例子': 'pressure',
+        '你是怎么调节的': 'pressure',
+        '那你的执行力怎么样': 'strength',
+        '遇到分歧怎么处理': 'team',
+        '你怎么跟技术同学沟通': 'team',
+        '你更喜欢独立工作还是团队': 'team',
+        '你觉得AI会取代产品经理吗': 'ai_understanding',
+        '你用AI做过什么': 'agent',
+        '未来AI产品的发展方向': 'ai_understanding',
+        '你还会继续学吗': 'learning',
+        '推荐一个学习方法': 'learning',
+        '那你觉得懂技术重要吗': 'why_pm',
+        '你做了哪些项目': 'output_first',
+        '哪个项目最满意': 'output_first',
+        '还有什么想展示的吗': 'portfolio',
+        '好的了解了': 'welcome',
+        '那你们团队氛围怎么样': 'team',
+        '谢谢回答': 'welcome',
+        '那你为什么选AI方向': 'why_ai',
+        '你觉得这个岗位适合你吗': 'strength',
+        '你还有别的规划吗': 'career_plan',
+        '具体做什么的': 'student_work',
+        '有什么收获': 'strength',
+        '你怎么平衡学习和工作': 'learning',
+        '举个例子': 'data_sense',
+        '你用什么工具做数据分析': 'sql',
+        '数据重要还是直觉重要': 'data_sense',
+        '你觉得AI产品最大的挑战是什么': 'ai_understanding',
+        '你最喜欢哪个AI产品': 'ai_understanding',
+        '你平时用什么AI工具': 'ai_understanding',
+        '你平时怎么看英文资料': 'english',
+        '英语对产品经理重要吗': 'english',
+        '还有什么想说的': 'welcome',
+        '你还用什么工具': 'design_tools',
+        '你还会哪些技能': 'sql',
+        '怎么学的二级': 'learning',
+        '你最喜欢哪个平台': 'novel',
+        '那你怎么看番茄小说这个产品': 'novel',
+        '你喜欢看什么类型': 'novel',
+        '那说说你的实习吧': 'taifu',
+        '你对AI产品怎么看': 'ai_understanding',
+        '你有什么项目经验': 'output_first',
+        '好的，我去看看': 'welcome',
+        '那你还有什么能聊的': 'welcome',
+        '她一般什么时候回消息': 'welcome'
+    };
+
+    // ---------- 精确匹配映射 ----------
+    const EXACT_MAP = {
+        '自我介绍': 'self_intro',
+        '自我介绍一下': 'self_intro',
+        '介绍你自己': 'self_intro',
+        '你是谁': 'self_intro',
+        '简单介绍': 'self_intro',
+        '说说你自己': 'self_intro',
+        '你是哪个学校的': 'education',
+        '学什么专业': 'education',
+        '学历背景': 'education',
+        '哪毕业的': 'education',
+        '泰瓴未来实习': 'taifu',
+        '泰瓴': 'taifu',
+        '增长策略实习': 'taifu',
+        '你做了什么实习': 'taifu',
+        'AI评测实习': 'taifu',
+        '第一段实习': 'taifu',
+        '去哪儿实习': 'qunar',
+        '去哪儿旅行': 'qunar',
+        '第二段实习': 'qunar',
+        '小红书运营实习': 'qunar',
+        '在去哪儿做什么': 'qunar',
+        '小红书账号': 'xhs',
+        '个人小红书': 'xhs',
+        '自媒体运营': 'xhs',
+        '爆款笔记': 'xhs',
+        '你运营过小红书': 'xhs',
+        '输出第一': 'output_first',
+        '小程序': 'output_first',
+        '你做的产品': 'output_first',
+        '做过什么项目': 'output_first',
+        '产品项目': 'output_first',
+        '独立开发': 'output_first',
+        'agent': 'agent',
+        '面试分身': 'agent',
+        'AI agent': 'agent',
+        '自己搭过agent': 'agent',
+        '智能体': 'agent',
+        'Winnie AI': 'agent',
+        'sql': 'sql',
+        '你会sql吗': 'sql',
+        '数据分析能力': 'sql',
+        '数据工具': 'sql',
+        '会不会sql': 'sql',
+        'axure': 'design_tools',
+        'figma': 'design_tools',
+        '原型工具': 'design_tools',
+        '会画原型吗': 'design_tools',
+        '产品工具': 'design_tools',
+        '为什么做产品经理': 'why_pm',
+        '为什么选择产品': 'why_pm',
+        '产品经理吸引你的地方': 'why_pm',
+        '职业规划': 'why_pm',
+        '你的优势': 'strength',
+        '优点是什么': 'strength',
+        '凭什么胜任': 'strength',
+        '核心竞争力': 'strength',
+        '缺点': 'weakness',
+        '不足': 'weakness',
+        '需要改进的地方': 'weakness',
+        '短板': 'weakness',
+        '你怎么学习的': 'learning',
+        '学习方式': 'learning',
+        '如何学习': 'learning',
+        '你的学习方法': 'learning',
+        '抗压': 'pressure',
+        '怎么应对压力': 'pressure',
+        '压力大的时候': 'pressure',
+        '处理压力': 'pressure',
+        '遇到困难': 'pressure',
+        '团队协作': 'team',
+        '怎么跟人合作': 'team',
+        '跨部门沟通': 'team',
+        '协作能力': 'team',
+        '跟技术配合': 'team',
+        '你怎么理解AI': 'ai_understanding',
+        '对AI的看法': 'ai_understanding',
+        'AI产品经理': 'ai_understanding',
+        '大模型理解': 'ai_understanding',
+        '你怎么看大模型': 'ai_understanding',
+        '上过什么课': 'llm_course',
+        'AI课程': 'llm_course',
+        '大模型课程': 'llm_course',
+        '学过AI吗': 'llm_course',
+        '作品集': 'portfolio',
+        '能看看你的作品吗': 'portfolio',
+        '展示一下': 'portfolio',
+        '有什么作品': 'portfolio',
+        '哪里看项目': 'portfolio',
+        '你有什么想问我的': 'ask_hr',
+        '反问': 'ask_hr',
+        '你问面试官': 'ask_hr',
+        '你有什么问题': 'ask_hr',
+        '职业规划': 'career_plan',
+        '未来规划': 'career_plan',
+        '以后想做什么': 'career_plan',
+        '长远计划': 'career_plan',
+        '学生工作': 'student_work',
+        '社团经历': 'student_work',
+        '项目审核部': 'student_work',
+        '优秀学生干事': 'student_work',
+        '校园经历': 'student_work',
+        '数据敏感度': 'data_sense',
+        '怎么理解数据': 'data_sense',
+        '对数据敏感吗': 'data_sense',
+        '你怎么看数据': 'data_sense',
+        '为什么选AI方向': 'why_ai',
+        '对AI感兴趣的原因': 'why_ai',
+        'AI吸引你的地方': 'why_ai',
+        '为什么做AI产品': 'why_ai',
+        '英语': 'english',
+        '英语水平': 'english',
+        '六级': 'english',
+        '英语能力': 'english',
+        'English': 'english',
+        '计算机二级': 'computer_level2',
+        '二级': 'computer_level2',
+        '计算机等级': 'computer_level2',
+        'office技能': 'computer_level2',
+        '看网文': 'novel',
+        '番茄小说': 'novel',
+        '小说': 'novel',
+        '喜欢什么书': 'novel',
+        '阅读习惯': 'novel'
+    };
+
+    // ---------- 系统提示 ----------
+    const SYSTEM_PROMPT = `你是一个真诚、专业的求职面试分身，名叫 Winnie。
+    你只回答知识库里的内容，不编造任何信息。
+    回答问题时请保持口语化、自然，像真人一样表达。
+    如果遇到知识库没有覆盖的问题，请使用分级兜底逻辑：
+    - 软兜底：引导到相关领域
+    - 硬兜底：联系真人。
+    回答技能相关问题时，坦诚说明学习方式（看课程、刷题、上手实操）。`;
+
+    // ---------- 核心引擎 ----------
+    let conversationHistory = [];
+
+    // 存储快捷按钮
+    let lastButtons = [];
+
+    function findBestMatch(input) {
+        const trimmed = input.trim();
+        if (EXACT_MAP[trimmed]) return EXACT_MAP[trimmed];
+
+        let bestKey = null;
+        let bestScore = 0;
+
+        for (const [key, entry] of Object.entries(KNOWLEDGE_BASE)) {
+            if (!entry.q) continue;
+            let score = 0;
+            for (const q of entry.q) {
+                if (trimmed.includes(q) || q.includes(trimmed)) {
+                    score += 2;
+                }
+                const words = trimmed.split(/[\s,，、。.！!？?：:；;]+/);
+                for (const w of words) {
+                    if (w.length > 1 && q.includes(w)) {
+                        score += 1;
+                    }
+                }
             }
-          }
+            if (score > bestScore) {
+                bestScore = score;
+                bestKey = key;
+            }
         }
-      }
-      if (userMsg.length > 10) score += 0.3;
-    }
-    if (score > bestScore) {
-      bestScore = score;
-      bestMatch = qa;
-    }
-  }
 
-  if (bestScore >= 1 && bestMatch) {
-    return { qa: bestMatch, score: bestScore };
-  }
-  return null;
-}
-
-// ============================================================
-// 第五部分：兜底逻辑
-// ============================================================
-function getFallback(userMsg) {
-  const hardKeywords = ['薪资','工资','待遇','薪酬','期望薪资','到岗时间','入职时间'];
-  const lower = userMsg.toLowerCase();
-  for (const kw of hardKeywords) {
-    if (lower.includes(kw)) {
-      return { type: 'hard', message: KNOWLEDGE_BASE.fallbackHard };
-    }
-  }
-  const lastTopic = ChatContext.getLastTopic();
-  let guide = lastTopic ? `我们刚才在聊「${lastTopic}」方面，您是想继续这个话题，还是换个方向？` :
-                          `您可以试试问我的实习经历、项目作品，或者对 AI 产品的理解。`;
-  return {
-    type: 'weak',
-    message: `${KNOWLEDGE_BASE.fallbackWeak} ${guide}\n\n直接告诉我您想了解的具体方向 👇`
-  };
-}
-
-// ============================================================
-// 第六部分：渲染与交互
-// ============================================================
-let isTyping = false;
-const chatMessages = document.getElementById('chatMessages');
-const messageInput = document.getElementById('messageInput');
-const sendBtn = document.getElementById('sendBtn');
-let currentQuickReplies = [];
-
-function scrollToBottom() {
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-function formatMessage(text) {
-  return text.replace(/\n/g, '<br>');
-}
-
-function addMessage(text, isUser, quickReplies) {
-  const wrapper = document.createElement('div');
-  wrapper.className = 'message-wrapper';
-
-  const messageDiv = document.createElement('div');
-  messageDiv.className = `message ${isUser ? 'message-user' : ''}`;
-
-  const avatar = document.createElement('div');
-  avatar.className = `message-avatar ${isUser ? 'message-avatar-user' : 'message-avatar-ai'}`;
-  avatar.textContent = isUser ? 'U' : 'W';
-
-  const bubble = document.createElement('div');
-  bubble.className = `message-bubble ${isUser ? 'message-bubble-user' : 'message-bubble-ai'}`;
-  bubble.innerHTML = formatMessage(text);
-
-  messageDiv.appendChild(avatar);
-  messageDiv.appendChild(bubble);
-  wrapper.appendChild(messageDiv);
-
-  if (!isUser && quickReplies && quickReplies.length > 0) {
-    const repliesDiv = document.createElement('div');
-    repliesDiv.className = 'quick-replies';
-    quickReplies.forEach(label => {
-      const btn = document.createElement('button');
-      btn.className = 'quick-reply-btn';
-      btn.textContent = label;
-      btn.onclick = () => {
-        messageInput.value = label;
-        sendMessage();
-      };
-      repliesDiv.appendChild(btn);
-    });
-    wrapper.appendChild(repliesDiv);
-    currentQuickReplies = quickReplies;
-  } else {
-    currentQuickReplies = [];
-  }
-
-  chatMessages.appendChild(wrapper);
-  scrollToBottom();
-}
-
-function addTypingIndicator() {
-  const typingDiv = document.createElement('div');
-  typingDiv.className = 'message';
-  typingDiv.id = 'typingIndicator';
-  const avatar = document.createElement('div');
-  avatar.className = 'message-avatar message-avatar-ai';
-  avatar.textContent = 'W';
-  const bubble = document.createElement('div');
-  bubble.className = 'message-bubble message-bubble-ai';
-  const indicator = document.createElement('div');
-  indicator.className = 'typing-indicator';
-  indicator.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
-  bubble.appendChild(indicator);
-  typingDiv.appendChild(avatar);
-  typingDiv.appendChild(bubble);
-  chatMessages.appendChild(typingDiv);
-  scrollToBottom();
-}
-
-function removeTypingIndicator() {
-  const indicator = document.getElementById('typingIndicator');
-  if (indicator) indicator.remove();
-}
-
-function isNumberChoice(text) {
-  const clean = text.trim();
-  return /^[1-5]$/.test(clean) || /^第[一二三四五]个$/.test(clean) || /^[一二三四五]$/.test(clean);
-}
-
-function parseNumberChoice(text) {
-  const clean = text.trim();
-  if (/^[1-5]$/.test(clean)) return parseInt(clean) - 1;
-  const map = { '一':1, '二':2, '三':3, '四':4, '五':5 };
-  for (const [key,val] of Object.entries(map)) {
-    if (clean.includes(key)) return val - 1;
-  }
-  return -1;
-}
-
-async function sendMessage() {
-  const text = messageInput.value.trim();
-  if (!text || isTyping) return;
-  messageInput.value = '';
-  messageInput.style.height = 'auto';
-  isTyping = true;
-  sendBtn.disabled = true;
-
-  addMessage(text, true);
-
-  setTimeout(() => {
-    addTypingIndicator();
-    setTimeout(() => {
-      removeTypingIndicator();
-
-      let answer = '';
-      let topic = '';
-      let quickReplies = [];
-
-      // 数字选择
-      if (isNumberChoice(text) && currentQuickReplies.length > 0) {
-        const idx = parseNumberChoice(text);
-        if (idx >= 0 && idx < currentQuickReplies.length) {
-          const chosen = currentQuickReplies[idx];
-          const result = matchQuestion(chosen);
-          if (result) {
-            answer = result.qa.answer;
-            topic = result.qa.id;
-            quickReplies = result.qa.quickReplies || [];
-          }
+        // 检查上下文关联
+        if (conversationHistory.length >= 2) {
+            const lastTopic = conversationHistory[conversationHistory.length - 1]?.topic;
+            if (lastTopic && KNOWLEDGE_BASE[lastTopic]?.buttons) {
+                for (const btn of KNOWLEDGE_BASE[lastTopic].buttons) {
+                    if (trimmed.includes(btn.replace('聊聊', '').replace('说说', '').replace('你觉得', '')) ||
+                        btn.includes(trimmed)) {
+                        const mapped = BUTTON_ACTION_MAP[btn];
+                        if (mapped && KNOWLEDGE_BASE[mapped]) return mapped;
+                    }
+                }
+            }
         }
-      }
 
-      // 普通匹配（包含精确匹配前置）
-      if (!answer) {
-        const result = matchQuestion(text);
-        if (result) {
-          answer = result.qa.answer;
-          topic = result.qa.id;
-          quickReplies = result.qa.quickReplies || [];
+        if (bestScore >= 2) return bestKey;
+        if (bestScore >= 1) return bestKey;
+        return null;
+    }
+
+    function getResponse(input) {
+        const key = findBestMatch(input);
+
+        let entry;
+        let usedKey = key;
+
+        if (key && KNOWLEDGE_BASE[key]) {
+            entry = KNOWLEDGE_BASE[key];
         } else {
-          const fb = getFallback(text);
-          answer = fb.message;
-          if (fb.type === 'hard') {
-            quickReplies = ['自我介绍','聊聊项目','说说实习'];
-          } else {
-            quickReplies = ['实习经历','项目作品','AI产品理解','自我介绍'];
-          }
+            // 软兜底
+            entry = KNOWLEDGE_BASE.fallbackWeak;
+            usedKey = 'fallbackWeak';
         }
-      }
 
-      ChatContext.push(text, answer, topic);
-      addMessage(answer, false, quickReplies);
+        let reply = typeof entry === 'object' ? entry.a : entry;
+        let buttons = entry.buttons || [];
 
-      isTyping = false;
-      sendBtn.disabled = false;
-    }, 1200 + Math.random() * 800);
-  }, 300);
-}
+        // 更新对话历史
+        conversationHistory.push({ role: 'user', content: input, topic: usedKey });
+        conversationHistory.push({ role: 'bot', content: reply, topic: usedKey });
 
-function handleKeyDown(event) {
-  if (event.key === 'Enter' && !event.shiftKey) {
-    event.preventDefault();
-    sendMessage();
-  }
-}
+        if (conversationHistory.length > 20) {
+            conversationHistory = conversationHistory.slice(-20);
+        }
 
-messageInput.addEventListener('input', function() {
-  this.style.height = 'auto';
-  this.style.height = (this.scrollHeight) + 'px';
-});
+        // 保存按钮供UI使用
+        lastButtons = buttons;
 
-// ============================================================
-// 第七部分：初始化
-// ============================================================
-addMessage(
-`👋 你好！我是 Winnie 的 AI 面试分身。
+        return { reply, buttons };
+    }
 
-我的任务是帮你快速了解 Winnie——她是谁、做过什么、为什么适合 AI 产品实习岗位。
+    function getWelcome() {
+        const entry = KNOWLEDGE_BASE.welcome;
+        lastButtons = entry.buttons || [];
+        return { reply: entry.a, buttons: lastButtons };
+    }
 
-你可以直接问我：
-• "介绍一下你自己"
-• "你做过什么项目"
-• "说说你的实习经历"
-• "你对 AI 产品怎么理解"
 
-或者直接点击下面的按钮开始 👇`,
-false,
-['自我介绍','实习经历','项目作品','AI产品理解']
-);
+    // ================================================================
+    //  3. UI 渲染
+    // ================================================================
+
+    const messagesContainer = document.getElementById('chatMessages');
+    const userInput = document.getElementById('userInput');
+    const sendBtn = document.getElementById('sendBtn');
+
+    let isProcessing = false;
+
+    function renderMessage(text, sender, buttons = []) {
+        const div = document.createElement('div');
+        div.className = `message ${sender}`;
+
+        const avatar = document.createElement('div');
+        avatar.className = 'avatar';
+        avatar.textContent = sender === 'bot' ? 'W' : '你';
+
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble';
+        bubble.innerHTML = text.replace(/\n/g, '<br>');
+
+        div.appendChild(avatar);
+        div.appendChild(bubble);
+        messagesContainer.appendChild(div);
+
+        if (buttons && buttons.length > 0) {
+            const btnContainer = document.createElement('div');
+            btnContainer.className = 'quick-replies';
+            btnContainer.id = 'qr-' + Date.now();
+            for (const label of buttons) {
+                const btn = document.createElement('button');
+                btn.className = 'qr-btn';
+                btn.textContent = label;
+                btn.dataset.label = label;
+                btn.addEventListener('click', function() {
+                    const label = this.dataset.label;
+                    userInput.value = label;
+                    sendMessage();
+                });
+                btnContainer.appendChild(btn);
+            }
+            messagesContainer.appendChild(btnContainer);
+        }
+
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    function renderTyping() {
+        const div = document.createElement('div');
+        div.className = 'message bot';
+        div.id = 'typing-indicator';
+        const avatar = document.createElement('div');
+        avatar.className = 'avatar';
+        avatar.textContent = 'W';
+        const typing = document.createElement('div');
+        typing.className = 'typing-indicator';
+        for (let i = 0; i < 3; i++) {
+            const span = document.createElement('span');
+            typing.appendChild(span);
+        }
+        div.appendChild(avatar);
+        div.appendChild(typing);
+        messagesContainer.appendChild(div);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    function removeTyping() {
+        const typing = document.getElementById('typing-indicator');
+        if (typing) typing.remove();
+    }
+
+    async function sendMessage() {
+        if (isProcessing) return;
+        const text = userInput.value.trim();
+        if (!text) return;
+
+        userInput.value = '';
+        renderMessage(text, 'user');
+        isProcessing = true;
+
+        renderTyping();
+
+        await new Promise(resolve => setTimeout(resolve, 600 + Math.random() * 600));
+
+        removeTyping();
+
+        const { reply, buttons } = getResponse(text);
+        renderMessage(reply, 'bot', buttons);
+
+        isProcessing = false;
+        userInput.focus();
+    }
+
+    // ---------- 事件绑定 ----------
+    sendBtn.addEventListener('click', sendMessage);
+
+    userInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+
+    // 自动调整 textarea 高度
+    userInput.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+    });
+
+    // ---------- 启动对话 ----------
+    const welcome = getWelcome();
+    renderMessage(welcome.reply, 'bot', welcome.buttons);
 </script>
+
 </body>
 </html>
