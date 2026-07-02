@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Winnie AI 面试分身</title>
     <style>
-        /* ===== 全局重置 ===== */
         * {
             margin: 0;
             padding: 0;
@@ -22,7 +21,6 @@
             padding: 16px;
         }
 
-        /* ===== 主容器 ===== */
         .chat-container {
             width: 100%;
             max-width: 420px;
@@ -36,7 +34,6 @@
             position: relative;
         }
 
-        /* ===== 顶部栏 ===== */
         .chat-header {
             background: white;
             padding: 18px 22px 12px 22px;
@@ -102,7 +99,6 @@
             margin-top: 1px;
         }
 
-        /* ===== 消息列表 ===== */
         .chat-messages {
             flex: 1;
             overflow-y: auto;
@@ -121,7 +117,6 @@
             border-radius: 4px;
         }
 
-        /* ===== 单条消息 ===== */
         .message {
             display: flex;
             gap: 10px;
@@ -188,7 +183,6 @@
             color: #666;
         }
 
-        /* ===== 快捷按钮 ===== */
         .quick-replies {
             display: flex;
             flex-wrap: wrap;
@@ -220,7 +214,6 @@
             transform: scale(0.96);
         }
 
-        /* ===== 底部输入区 ===== */
         .chat-input-area {
             border-top: 1px solid #f0f0f0;
             padding: 12px 18px 16px 18px;
@@ -277,12 +270,10 @@
             transform: scale(0.94);
         }
 
-        /* ===== 滚动条 ===== */
         .chat-messages {
             scroll-behavior: smooth;
         }
 
-        /* ===== 打字指示器 ===== */
         .typing-indicator {
             display: flex;
             gap: 5px;
@@ -312,7 +303,6 @@
             30% { transform: translateY(-8px); }
         }
 
-        /* ===== 消息中的链接 ===== */
         .bubble a {
             color: #4F7CFF;
             text-decoration: underline;
@@ -322,7 +312,6 @@
             color: #3a66d9;
         }
 
-        /* ===== 响应式 ===== */
         @media (max-width: 480px) {
             body { padding: 8px; }
             .chat-container {
@@ -341,7 +330,6 @@
 
 <div class="chat-container">
 
-    <!-- ===== 顶部栏 ===== -->
     <div class="chat-header">
         <div class="header-avatar">W</div>
         <div class="header-info">
@@ -351,12 +339,8 @@
         </div>
     </div>
 
-    <!-- ===== 消息区域 ===== -->
-    <div class="chat-messages" id="chatMessages">
-        <!-- 开场白由 JS 渲染 -->
-    </div>
+    <div class="chat-messages" id="chatMessages"></div>
 
-    <!-- ===== 底部输入 ===== -->
     <div class="chat-input-area">
         <textarea id="userInput" rows="1" placeholder="输入你想问的…"></textarea>
         <button class="send-btn" id="sendBtn">➤</button>
@@ -366,7 +350,7 @@
 
 <script>
     // ================================================================
-    //  1. 知识库（28 个问答条目，全部口语化）
+    //  知识库
     // ================================================================
 
     const KNOWLEDGE_BASE = {
@@ -397,7 +381,7 @@
 
         // ---------- 3. 泰瓴未来实习 ----------
         taifu: {
-            q: ['泰瓴未来实习', '增长策略实习', '你做了什么实习', 'AI评测实习', '第一段实习', '泰瓴'],
+            q: ['泰瓴未来实习', '泰瓴', '增长策略实习', '你做了什么实习', 'AI评测实习', '第一段实习'],
             a: `我在泰瓴未来做的是策略增长实习生，主要工作是 AI 内容评测和 Prompt 调优。
     当时业务方需要 AI 批量生成 B2B 行业文章，但 AI 产出的内容质量参差不齐。
     我的工作就是用 EEAT 质量框架 + 7 个维度去审核每一篇内容，看相关性、真实性、业务匹配度等等。
@@ -454,7 +438,7 @@
             buttons: ['技术难点是什么', '用户反馈怎么样', '接下来打算怎么优化']
         },
 
-        // ---------- 8. SQL 技能 ----------
+        // ---------- 8. SQL ----------
         sql: {
             q: ['sql', '你会sql吗', '数据分析能力', '数据工具', '会不会sql'],
             a: `SQL 这块我是自学的。主要是在牛客网上刷题，边看课程边练习，从简单查询到多表连接、子查询、聚合函数这些，一步步来的。
@@ -464,7 +448,7 @@
             buttons: ['你还会什么工具', '怎么学的', '具体怎么应用到工作中的']
         },
 
-        // ---------- 9. Axure / Figma 技能 ----------
+        // ---------- 9. Axure / Figma ----------
         design_tools: {
             q: ['axure', 'figma', '原型工具', '会画原型吗', '产品工具'],
             a: `Axure 和 Figma 我都能用，主要用的还是 Axure。
@@ -486,7 +470,7 @@
             buttons: ['你觉得做产品最重要的能力是什么', '你有过什么失败经历', '对未来有什么规划']
         },
 
-        // ---------- 11. 最大优势 ----------
+        // ---------- 11. 优势 ----------
         strength: {
             q: ['你的优势', '优点是什么', '凭什么胜任', '核心竞争力'],
             a: `我觉得我的优势有三个：
@@ -508,16 +492,17 @@
 
         // ---------- 13. 学习方法 ----------
         learning: {
-            q: ['你怎么学习的', '学习方式', '如何学习', '你的学习方法'],
+            q: ['你怎么学习的', '学习方式', '如何学习', '你的学习方法', '最近在学什么', '最近学什么'],
             a: `我的学习方法其实挺简单的：先看，然后立刻上手做。
     SQL 是看课程 + 刷题，Axure 是看课程 + 画原型，Vibe Coding 是直接上手跟 TRAE 协作写代码。
     我比较信奉“在实践中学习”这个理念——你看了再多教程，不亲手做一遍，还是会卡在第一个坑里。
     实习的时候我也是这样，边做边问边复盘，每天写日报逼自己总结。
+    我最近在重点补 AI 和代码相关的知识，想一点点把技术短板补起来。目前在看大模型相关的课程，也在跟着一些实战项目练手。
     我觉得快速学习的能力比已经会什么更重要。`,
             buttons: ['你最近在学什么', '怎么保持学习动力', '推荐一个学习方法']
         },
 
-        // ---------- 14. 抗压能力 ----------
+        // ---------- 14. 抗压 ----------
         pressure: {
             q: ['抗压', '怎么应对压力', '压力大的时候', '处理压力', '遇到困难'],
             a: `我觉得抗压能力是一个积累的过程，不是天生的。
@@ -538,7 +523,7 @@
             buttons: ['遇到分歧怎么处理', '你怎么跟技术同学沟通', '你更喜欢独立工作还是团队']
         },
 
-        // ---------- 16. 对AI的理解 ----------
+        // ---------- 16. AI理解 ----------
         ai_understanding: {
             q: ['你怎么理解AI', '对AI的看法', 'AI产品经理', '大模型理解', '你怎么看大模型'],
             a: `我觉得 AI 目前最大的价值不是“替代人”，而是“提升人的效率”——把重复的事情交给机器，把创造性的部分留给人。
@@ -567,7 +552,7 @@
             buttons: ['你做了哪些项目', '哪个项目最满意', '还有什么想展示的吗']
         },
 
-        // ---------- 19. 反问面试官 ----------
+        // ---------- 19. 反问 ----------
         ask_hr: {
             q: ['你有什么想问我的', '反问', '你问面试官', '你有什么问题'],
             a: `好呀，我想问：
@@ -618,7 +603,7 @@
             buttons: ['你觉得AI产品最大的挑战是什么', '你最喜欢哪个AI产品', '你平时用什么AI工具']
         },
 
-        // ---------- 24. 自我介绍（短版，用于开头） ----------
+        // ---------- 24. 开场白 ----------
         welcome: {
             q: ['start'],
             a: `你好！我是 Winnie 的 AI 面试分身 👋
@@ -633,7 +618,7 @@
             buttons: ['介绍一下你自己', '你有什么项目经历', '你做过哪些实习']
         },
 
-        // ---------- 25. 英语能力 ----------
+        // ---------- 25. 英语 ----------
         english: {
             q: ['英语', '英语水平', '六级', '英语能力', 'English'],
             a: `我英语已经过了六级，高考英语 135+，日常的英文文档阅读和基础书面沟通都没有问题。
@@ -653,36 +638,41 @@
 
         // ---------- 27. 看网文 ----------
         novel: {
-            q: ['看网文', '番茄小说', '小说', '喜欢什么书', '阅读习惯'],
-            a: `我平时还挺喜欢看网文的，番茄小说、晋江这些平台都会逛。
+            q: ['看网文', '晋江', '小说', '喜欢什么书', '阅读习惯'],
+            a: `我平时还挺喜欢看网文的，主要在晋江逛，偶尔也会看看番茄小说上的热门作品。
     我觉得做内容型产品的产品经理，最好自己就是用户——你才能理解用户为什么会在这个页面停留、为什么会在那个地方划走。
     读网文对我来说也是一种观察用户行为的方式：什么样的内容能让人一直往下翻、什么样的互动能留住人。这些都是做内容产品的直觉来源。`,
-            buttons: ['你最喜欢哪个平台', '那你怎么看番茄小说这个产品', '你喜欢看什么类型']
+            buttons: ['你最喜欢哪个平台', '那你怎么看晋江这个产品', '你喜欢看什么类型']
         },
 
-        // ---------- 28. 兜底（软） ----------
+        // ---------- 28. 兜底（软）----------
         fallbackWeak: {
-            a: `这块我暂时没有准备到具体案例，不过我在相关经历里做过类似的事情。你可以换一个角度问，比如问我实习里最难忘的一件事、或者我对 AI 产品的理解，我都可以跟你聊聊。`,
-            buttons: ['那说说你的实习吧', '你对AI产品怎么看', '你有什么项目经验']
-        },
-
-        // ---------- 29. 兜底（硬） ----------
-        fallbackHard: {
             a: `这块 Winnie 没有跟我细聊，所以我暂时没法给你一个满意的答案。
-    不过你可以直接联系 Winnie 本人，她的联系方式是：
+    不过你可以直接联系 Winnie 本人：
     📞 19298915379
     📧 32203783@qq.com
+    也可以直接看她的作品集：https://chocolatewin.github.io/my-website/
     相信她能给你一个更完整的解答。😊`,
-            buttons: ['好的，我去看看', '那你还有什么能聊的', '她一般什么时候回消息']
+            buttons: ['好的我去看看', '那先聊聊别的', '她一般什么时候回消息']
+        },
+
+        // ---------- 29. 兜底（硬）----------
+        fallbackHard: {
+            a: `这块 Winnie 没有跟我细聊，所以我暂时没法给你一个满意的答案。
+    不过你可以直接联系 Winnie 本人：
+    📞 19298915379
+    📧 32203783@qq.com
+    也可以直接看她的作品集：https://chocolatewin.github.io/my-website/
+    相信她能给你一个更完整的解答。😊`,
+            buttons: ['好的我去看看', '那先聊聊别的', '她一般什么时候回消息']
         }
     };
 
 
     // ================================================================
-    //  2. 对话引擎
+    //  对话引擎
     // ================================================================
 
-    // ---------- 快捷按钮映射 ----------
     const BUTTON_ACTION_MAP = {
         '介绍一下你自己': 'self_intro',
         '你有什么项目经历': 'output_first',
@@ -693,7 +683,7 @@
         '你补了哪些技能': 'sql',
         '做产品有什么优势': 'why_pm',
         '聊聊你的项目': 'output_first',
-        '具体怎么优化Prompt的': 'prompt_detail',
+        '具体怎么优化Prompt的': 'taifu',
         '你学到了什么': 'why_pm',
         '再来一段实习': 'qunar',
         '具体怎么分析数据的': 'data_sense',
@@ -724,6 +714,7 @@
         '那你觉得自己能胜任吗': 'strength',
         '你的学习方式是什么': 'learning',
         '你最近在学什么': 'learning',
+        '最近学什么': 'learning',
         '怎么保持学习动力': 'learning',
         '推荐一个学习方法': 'learning',
         '举一个具体的例子': 'pressure',
@@ -736,7 +727,6 @@
         '你用AI做过什么': 'agent',
         '未来AI产品的发展方向': 'ai_understanding',
         '你还会继续学吗': 'learning',
-        '推荐一个学习方法': 'learning',
         '那你觉得懂技术重要吗': 'why_pm',
         '你做了哪些项目': 'output_first',
         '哪个项目最满意': 'output_first',
@@ -763,17 +753,16 @@
         '你还会哪些技能': 'sql',
         '怎么学的二级': 'learning',
         '你最喜欢哪个平台': 'novel',
-        '那你怎么看番茄小说这个产品': 'novel',
+        '那你怎么看晋江这个产品': 'novel',
         '你喜欢看什么类型': 'novel',
         '那说说你的实习吧': 'taifu',
         '你对AI产品怎么看': 'ai_understanding',
         '你有什么项目经验': 'output_first',
-        '好的，我去看看': 'welcome',
-        '那你还有什么能聊的': 'welcome',
+        '好的我去看看': 'welcome',
+        '那先聊聊别的': 'welcome',
         '她一般什么时候回消息': 'welcome'
     };
 
-    // ---------- 精确匹配映射 ----------
     const EXACT_MAP = {
         '自我介绍': 'self_intro',
         '自我介绍一下': 'self_intro',
@@ -839,6 +828,8 @@
         '学习方式': 'learning',
         '如何学习': 'learning',
         '你的学习方法': 'learning',
+        '最近在学什么': 'learning',
+        '最近学什么': 'learning',
         '抗压': 'pressure',
         '怎么应对压力': 'pressure',
         '压力大的时候': 'pressure',
@@ -894,25 +885,13 @@
         '计算机等级': 'computer_level2',
         'office技能': 'computer_level2',
         '看网文': 'novel',
-        '番茄小说': 'novel',
+        '晋江': 'novel',
         '小说': 'novel',
         '喜欢什么书': 'novel',
         '阅读习惯': 'novel'
     };
 
-    // ---------- 系统提示 ----------
-    const SYSTEM_PROMPT = `你是一个真诚、专业的求职面试分身，名叫 Winnie。
-    你只回答知识库里的内容，不编造任何信息。
-    回答问题时请保持口语化、自然，像真人一样表达。
-    如果遇到知识库没有覆盖的问题，请使用分级兜底逻辑：
-    - 软兜底：引导到相关领域
-    - 硬兜底：联系真人。
-    回答技能相关问题时，坦诚说明学习方式（看课程、刷题、上手实操）。`;
-
-    // ---------- 核心引擎 ----------
     let conversationHistory = [];
-
-    // 存储快捷按钮
     let lastButtons = [];
 
     function findBestMatch(input) {
@@ -926,29 +905,20 @@
             if (!entry.q) continue;
             let score = 0;
             for (const q of entry.q) {
-                if (trimmed.includes(q) || q.includes(trimmed)) {
-                    score += 2;
-                }
+                if (trimmed.includes(q) || q.includes(trimmed)) score += 2;
                 const words = trimmed.split(/[\s,，、。.！!？?：:；;]+/);
                 for (const w of words) {
-                    if (w.length > 1 && q.includes(w)) {
-                        score += 1;
-                    }
+                    if (w.length > 1 && q.includes(w)) score += 1;
                 }
             }
-            if (score > bestScore) {
-                bestScore = score;
-                bestKey = key;
-            }
+            if (score > bestScore) { bestScore = score; bestKey = key; }
         }
 
-        // 检查上下文关联
         if (conversationHistory.length >= 2) {
             const lastTopic = conversationHistory[conversationHistory.length - 1]?.topic;
             if (lastTopic && KNOWLEDGE_BASE[lastTopic]?.buttons) {
                 for (const btn of KNOWLEDGE_BASE[lastTopic].buttons) {
-                    if (trimmed.includes(btn.replace('聊聊', '').replace('说说', '').replace('你觉得', '')) ||
-                        btn.includes(trimmed)) {
+                    if (trimmed.includes(btn.replace('聊聊','').replace('说说','').replace('你觉得','')) || btn.includes(trimmed)) {
                         const mapped = BUTTON_ACTION_MAP[btn];
                         if (mapped && KNOWLEDGE_BASE[mapped]) return mapped;
                     }
@@ -963,32 +933,19 @@
 
     function getResponse(input) {
         const key = findBestMatch(input);
-
-        let entry;
-        let usedKey = key;
-
+        let entry, usedKey = key;
         if (key && KNOWLEDGE_BASE[key]) {
             entry = KNOWLEDGE_BASE[key];
         } else {
-            // 软兜底
             entry = KNOWLEDGE_BASE.fallbackWeak;
             usedKey = 'fallbackWeak';
         }
-
         let reply = typeof entry === 'object' ? entry.a : entry;
         let buttons = entry.buttons || [];
-
-        // 更新对话历史
         conversationHistory.push({ role: 'user', content: input, topic: usedKey });
         conversationHistory.push({ role: 'bot', content: reply, topic: usedKey });
-
-        if (conversationHistory.length > 20) {
-            conversationHistory = conversationHistory.slice(-20);
-        }
-
-        // 保存按钮供UI使用
+        if (conversationHistory.length > 20) conversationHistory = conversationHistory.slice(-20);
         lastButtons = buttons;
-
         return { reply, buttons };
     }
 
@@ -1000,7 +957,7 @@
 
 
     // ================================================================
-    //  3. UI 渲染
+    //  UI
     // ================================================================
 
     const messagesContainer = document.getElementById('chatMessages');
@@ -1093,7 +1050,6 @@
         userInput.focus();
     }
 
-    // ---------- 事件绑定 ----------
     sendBtn.addEventListener('click', sendMessage);
 
     userInput.addEventListener('keydown', function(e) {
@@ -1103,13 +1059,11 @@
         }
     });
 
-    // 自动调整 textarea 高度
     userInput.addEventListener('input', function() {
         this.style.height = 'auto';
         this.style.height = Math.min(this.scrollHeight, 100) + 'px';
     });
 
-    // ---------- 启动对话 ----------
     const welcome = getWelcome();
     renderMessage(welcome.reply, 'bot', welcome.buttons);
 </script>
