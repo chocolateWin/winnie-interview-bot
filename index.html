@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Winnie - AI 产品实习生 | 数字面试分身</title>
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --primary-light: #3b82f6;
+      --accent-color: #06b6d4;
+      --bg-dark: #0f172a;
+      --bg-card: rgba(30, 41, 59, 0.7);
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+      min-height: 100vh;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    @media (min-width: 1024px) {
+      .container {
+        flex-direction: row;
+      }
+    }
+
+    .sidebar {
+      width: 100%;
+      max-width: 320px;
+      padding: 24px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    @media (min-width: 1024px) {
+      .sidebar {
+        border-right: 1px solid var(--border-color);
+        border-bottom: none;
+      }
+    }
+
+    .profile-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .avatar {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 16px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #3b82f6, #06b6d4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      color: white;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .profile-name {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .profile-alias {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+
+    .profile-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      background: rgba(37, 99, 235, 0.15);
+      border: 1px solid rgba(37, 99, 235, 0.3);
+      border-radius: 20px;
+      font-size: 12px;
+      color: #60a5fa;
+      margin-bottom: 20px;
+    }
+
+    .profile-info {
+      text-align: left;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .info-item:last-child {
+      border-bottom: none;
+    }
+
+    .info-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #60a5fa;
+      font-size: 12px;
+    }
+
+    .info-content {
+      flex: 1;
+    }
+
+    .info-label {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-bottom: 2px;
+    }
+
+    .info-value {
+      font-size: 13px;
+      color: var(--text-primary);
+    }
+
+    .link-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .link-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .link-btn-primary {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: white;
+    }
+
+    .link-btn-primary:hover {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    .link-btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: white;
+    }
+
+    .link-btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .chat-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .chat-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .chat-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .chat-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #3b82f6, #06b6d4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: white;
+    }
+
+    .chat-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .chat-status {
+      font-size: 12px;
+      color: #22c55e;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .scrollbar-thin::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .scrollbar-thin::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .scrollbar-thin::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 3px;
+    }
+
+    .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .message {
+      display: flex;
+      gap: 12px;
+    }
+
+    .message-user {
+      flex-direction: row-reverse;
+    }
+
+    .message-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: white;
+    }
+
+    .message-avatar-ai {
+      background: linear-gradient(135deg, #3b82f6, #06b6d4);
+    }
+
+    .message-avatar-user {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .message-bubble {
+      max-width: 70%;
+      padding: 12px 16px;
+      border-radius: 18px;
+      font-size: 14px;
+      line-height: 1.6;
+      word-wrap: break-word;
+    }
+
+    .message-bubble-ai {
+      background: var(--bg-card);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-primary);
+      border-bottom-left-radius: 4px;
+    }
+
+    .message-bubble-user {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+
+    .typing-indicator {
+      display: flex;
+      gap: 4px;
+      padding: 12px 16px;
+    }
+
+    .typing-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text-secondary);
+      animation: typing 1.4s infinite ease-in-out both;
+    }
+
+    .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+    .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+    @keyframes typing {
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1); }
+    }
+
+    .chat-input-area {
+      padding: 20px 24px;
+      border-top: 1px solid var(--border-color);
+      background: rgba(15, 23, 42, 0.95);
+    }
+
+    .input-wrapper {
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+    }
+
+    .input-field {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 12px 16px;
+      color: var(--text-primary);
+      font-size: 14px;
+      outline: none;
+      resize: none;
+      min-height: 44px;
+      max-height: 120px;
+      line-height: 1.5;
+    }
+
+    .input-field:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .input-field::placeholder {
+      color: #64748b;
+    }
+
+    .send-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #2563eb, #06b6d4);
+      border: none;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .send-btn:hover:not(:disabled) {
+      background: linear-gradient(135deg, #3b82f6, #22d3ee);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    .send-btn:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .send-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .system-badge {
+      text-align: center;
+      padding: 8px 16px;
+      margin-bottom: 16px;
+    }
+
+    .system-badge span {
+      font-size: 12px;
+      color: var(--text-secondary);
+      background: rgba(255, 255, 255, 0.05);
+      padding: 4px 12px;
+      border-radius: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <div class="profile-card">
+        <div class="avatar">W</div>
+        <h2 class="profile-name">陈致巧</h2>
+        <p class="profile-alias">@winnie</p>
+        <span class="profile-badge">AI 产品实习生</span>
+        
+        <div class="profile-info">
+          <div class="info-item">
+            <div class="info-icon">🏫</div>
+            <div class="info-content">
+              <div class="info-label">教育背景</div>
+              <div class="info-value">兰州大学 · 汉语言文学</div>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-icon">🎯</div>
+            <div class="info-content">
+              <div class="info-label">核心标签</div>
+              <div class="info-value">3万赞小红书主理人 × Vibe Coding实践者</div>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-icon">📱</div>
+            <div class="info-content">
+              <div class="info-label">联系方式</div>
+              <div class="info-value">19298915379</div>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-icon">✉️</div>
+            <div class="info-content">
+              <div class="info-label">邮箱</div>
+              <div class="info-value">32203783@qq.com</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="link-buttons">
+          <a href="https://chocolatewin.github.io/my-website/" target="_blank" class="link-btn link-btn-primary">
+            <span>🌐</span> 作品集网站
+          </a>
+          <a href="https://chocolatewin.github.io/PM-Portfolio/" target="_blank" class="link-btn link-btn-secondary">
+            <span>📱</span> 小程序项目集
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <main class="chat-area">
+      <header class="chat-header">
+        <div class="chat-header-left">
+          <div class="chat-avatar">W</div>
+          <div>
+            <h3 class="chat-title">Winnie AI 面试分身</h3>
+            <span class="chat-status">
+              <span class="status-dot"></span>
+              在线
+            </span>
+          </div>
+        </div>
+      </header>
+
+      <div class="chat-messages scrollbar-thin" id="chatMessages">
+        <div class="system-badge">
+          <span>AI 数字面试分身已就绪</span>
+        </div>
+      </div>
+
+      <footer class="chat-input-area">
+        <div class="input-wrapper">
+          <textarea 
+            id="messageInput" 
+            class="input-field" 
+            placeholder="请输入您的问题..."
+            rows="1"
+            onkeydown="handleKeyDown(event)"
+          ></textarea>
+          <button id="sendBtn" class="send-btn" onclick="sendMessage()">
+            →
+          </button>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    const KNOWLEDGE_BASE = {
+      basicInfo: {
+        name: "陈致巧",
+        alias: "winnie",
+        school: "兰州大学",
+        major: "汉语言文学",
+        graduationDate: "2028.06",
+        targetPosition: "AI 产品实习生",
+        phone: "19298915379",
+        email: "32203783@qq.com",
+        portfolioUrl: "https://chocolatewin.github.io/my-website/",
+        miniProgramUrl: "https://chocolatewin.github.io/PM-Portfolio/"
+      },
+      fallbackMessage: "这个细节我的简历里没有展开，欢迎联系我细聊，手机/微信19298915379。"
+    };
+
+    const MOCK_ANSWERS = [
+      {
+        keywords: ["介绍", "自己", "自我介绍", "你是谁", "你好", "hi", "hello"],
+        answer: "我目前的核心标签是：从汉语言到 AI 产品的复合型选手——一边是运营了两年的小红书账号，单篇最高 2.1 万+ 阅读、累计 3 万赞；一边是最近独立用 Vibe Coding 完成的阅读记录小程序，15 个引导式锚点 + 4 大核心模块，从 PRD 到上线全流程自己扛。\n\n做这件事的初心其实很简单——我认为产品是一个通用的观念，无论是内容、代码还是人生，用产品思维去打磨都会越来越好。所以我不是'跨界'，是把同一件事做到了不同介质上。\n\n需要我展开讲讲这个小程序的具体技术实现和产品设计思路吗？"
+      },
+      {
+        keywords: ["为什么", "选择", "AI产品", "方向", "跨界"],
+        answer: "我选择 AI 产品方向，核心是相信产品思维可以跨越介质。我做小红书运营时，就是在用产品思维做内容——定义用户、验证假设、数据迭代。后来发现 AI 工具可以帮我把这种思维从内容延伸到代码，就用 Vibe Coding 做了小程序。\n\n产品是一个通用的观念，我们学习进步本质上也是在磨炼产品。我不觉得自己是'跨界'，而是把'把一件事做成好产品'这件事从内容做到了代码。\n\n关于这个项目，我在个人作品集里放了完整的 PRD、Axure 原型和竞品分析，要看链接吗？"
+      },
+      {
+        keywords: ["技术", "能力", "够吗", "编程", "代码", "计算机"],
+        answer: "坦白说，我不是计算机科班出身，但我用行动证明了学习能力和交付能力。我自学 SQL 在力扣和牛客上刷过题，能实战解题；用 Vibe Coding 独立完成了阅读记录小程序，从 PRD 到上线全流程自己扛。\n\n更重要的是，我理解 AI 产品的核心不是写代码，而是理解用户需求、设计产品逻辑、用 AI 工具实现价值。当然，如果岗位有特定技术要求，我也愿意快速补齐。\n\n我其实还做了一个相关的作品——个人作品集网站，也是用 Vibe Coding 搭的，思路一脉相承，感兴趣吗？"
+      },
+      {
+        keywords: ["项目", "最有成就感", "小程序", "输出第一", "作品"],
+        answer: "最有成就感的项目是【输出第一】阅读/观影记录小程序。当时我体验了豆瓣、微信读书后发现一个痛点：面对空白输入框，用户表达门槛很高。于是我设计了 15 个引导式锚点，让'没话说'变成'想说'。\n\n这个项目让我证明了：我不是'只懂内容不懂技术'的选手，而是能用产品思维驱动 AI 协作，从需求到上线全流程交付的人。这正是 AI 产品实习生最需要的能力。\n\n这块我在泰竑未来还用 EEAT 框架 + 7 维度标准做过体系化落地，要具体聊聊吗？"
+      },
+      {
+        keywords: ["数据分析", "SQL", "数据能力", "力扣", "牛客"],
+        answer: "我自学了 SQL，在力扣和牛客上刷过题，能做基础到进阶的数据查询与分析。同时我也系统学习了 AI 大模型的 RAG、微调原理，不只是'会用 ChatGPT'，而是理解能力边界从哪来。\n\n在当代互联网如此发达的情况下，专业与专业间的壁垒会越来越小，永远保持学习才是真的。我用一年时间从中文系学生走到能独立交付 AI 产品，这个速度就是最好的证明。\n\n关于这个项目，我在个人作品集里放了完整的 PRD、Axure 原型和竞品分析，要看链接吗？"
+      },
+      {
+        keywords: ["工具", "设计", "Axure", "Figma", "XMind", "openprocessing"],
+        answer: "我熟练使用 Axure 做高保真交互原型，【输出第一】小程序的完整原型就是自己搭的；Figma 用于 UI/交互设计；XMind 画业务流程图和思维导图。另外，作品集网站上的动画效果都是我自己用 openprocessing 磨出来的，不是套模板。\n\nSQL 方面也自学过，在力扣和牛客上刷过题，能实战解题。\n\n这段实习让我总结出一个方法论，我可以展开讲讲吗？"
+      },
+      {
+        keywords: ["大模型", "AI", "理解", "RAG", "微调", "Prompt", "思维链", "CoT"],
+        answer: "我对 AI 大模型的理解不止于'会用 ChatGPT'。我系统学习过 RAG（检索增强生成）、微调的原理和适用场景，知道大模型能力边界从哪来。在泰竑未来实习时，还做过 EEAT 框架 + 思维链（CoT）的 Prompt 调优，从'会用 Prompt'进阶到系统性优化方法论。\n\n这块我在泰竑未来还用 EEAT 框架 + 7 维度标准做过体系化落地，要具体聊聊吗？"
+      },
+      {
+        keywords: ["Agent", "代理", "产品", "上游治理", "返工"],
+        answer: "我对 Agent 产品的理解是：它和传统产品最大的差异在于——一次错误输出会在下游引发多轮返工的连锁成本。所以我的核心方法是'上游治理，减少下游返工'。\n\n在泰竑未来实习时，我参与了'前置协议约束'方案落地，让 Prompt 框架、约束协议、评测标准在源头就把问题拦住。好产品永远是设计出来的，不是修出来的。\n\n这段实习让我总结出一个方法论，我可以展开讲讲吗？"
+      },
+      {
+        keywords: ["缺点", "不足", "劣势", "弱点"],
+        answer: "我承认技术底子不如科班出身的同学，但我一直在快速追赶。从中文系到能用 Vibe Coding 独立做小程序，只用了一年时间。作品集网站上的动画每一帧都是我自己用 openprocessing 磨出来的，这份学习速度和毅力是我最大的优势。\n\n而且，跨学科背景让我在理解用户需求、设计产品逻辑时有天然优势——毕竟，好的产品首先要懂人。\n\n我其实还做了一个相关的作品——个人作品集网站，也是用 Vibe Coding 搭的，思路一脉相承，感兴趣吗？"
+      },
+      {
+        keywords: ["内容", "运营", "小红书", "为什么不做"],
+        answer: "我不觉得自己'不做内容/运营了'，而是一直在做产品。小红书运营本质上就是产品运营——定义目标用户、建立内容假设、数据验证、迭代选题。我把账号当作最小可行性产品（MVP）在运营，单篇最高 2.1 万+ 阅读、累计 3 万赞就是最好的证明。\n\n现在我只是把这种产品思维延伸到了 AI 产品领域，用代码实现更复杂的产品逻辑。\n\n关于这个项目，我在个人作品集里放了完整的 PRD、Axure 原型和竞品分析，要看链接吗？"
+      },
+      {
+        keywords: ["薪资", "到岗", "时间", "工资", "入职"],
+        answer: "这个细节我的简历里没有展开，欢迎联系我细聊，手机/微信19298915379。"
+      },
+      {
+        keywords: ["实习", "经历", "泰竑", "去哪儿", "网易", "有道", "佰司特"],
+        answer: "我有四段实习经历，其中最核心的是在泰竑未来做策略增长实习生。那段时间我系统性地在 AI 产品链路里工作，用 EEAT 质量框架 + 7 维度内容标准审核 AI 产出，参与了思维链（CoT）Prompt 工程优化，还独立负责了产品网页的核心决策。\n\n之前在去哪儿做过小红书运营实习，监控 8 个账号的日度数据，主导 20+ 组分人群的运营拓展。\n\n这段实习让我总结出一个方法论，我可以展开讲讲吗？"
+      },
+      {
+        keywords: ["学校", "专业", "大学", "汉语言", "兰州"],
+        answer: "我在兰州大学读汉语言文学专业，全日制本科，预计 2028 年 6 月毕业。虽然不是计算机或数据专业，但我通过自学和实践证明了自己的学习能力和产品思维。\n\n汉语言文学背景给了我很好的文字表达能力，这在撰写 PRD、定义产品逻辑时能降低沟通成本。\n\n我其实还做了一个相关的作品——个人作品集网站，也是用 Vibe Coding 搭的，思路一脉相承，感兴趣吗？"
+      },
+      {
+        keywords: ["小红书", "账号", "运营", "赞", "阅读", "内容"],
+        answer: "我从 2024 年 11 月开始运营小红书账号，到现在累计获赞 3 万，单篇最高阅读 2.1 万+。我把账号当作最小可行性产品（MVP）在运营——定义目标用户、建立内容假设、数据验证、迭代选题。\n\n选题策划、文案撰写、排版视觉全流程都是我独立完成的，通过评论互动和私域收集用户反馈，持续优化内容。\n\n关于这个项目，我在个人作品集里放了完整的 PRD、Axure 原型和竞品分析，要看链接吗？"
+      },
+      {
+        keywords: ["作品集", "网站", "网页", "作品"],
+        answer: "我的作品集网站是用 Vibe Coding 独立搭建的，集中展示了我的 PRD、竞品分析报告、Axure 原型、业务流程图和项目经历。\n\n设计时我站在 HR 视角，做了清晰的信息层级和浏览动线，目的是降低招聘方的信息获取成本——这就是我想给招聘方的高效浏览体验。\n\n需要我发给您链接吗？"
+      },
+      {
+        keywords: ["Vibe", "Coding", "TRAE", "AI编程", "自然语言"],
+        answer: "Vibe Coding 是我实践 AI 编程的主要方式。我用 TRAE 这个 AI 编程工具，通过自然语言描述需求，让 AI 生成代码，然后我负责调试和优化。\n\n【输出第一】小程序和作品集网站都是这么做出来的——从需求描述到功能拆解，再到代码生成和调试修复，全流程用自然语言驱动开发。这让我验证了'大模型能力边界 × 用户需求'的匹配方式。\n\n这块我在泰竑未来还用 EEAT 框架 + 7 维度标准做过体系化落地，要具体聊聊吗？"
+      },
+      {
+        keywords: ["能力", "优势", "核心能力", "跨学科", "复盘", "协作"],
+        answer: "我认为自己有三大核心能力：第一是跨学科融合的自驱力，汉语言文学背景让我有很好的共情能力，同时又能用 Vibe Coding 独立完成产品；第二是沟通协作与用户共情，在泰竑和去哪儿实习时都证明了这一点；第三是复盘与迭代思维，坚持日常复盘，形成'执行→反思→改进'的正向循环。\n\n关于这个项目，我在个人作品集里放了完整的 PRD、Axure 原型和竞品分析，要看链接吗？"
+      },
+      {
+        keywords: ["问题", "反问", "你有什么问题"],
+        answer: "有的，我想问三个：\n\n1. 这个 AI 产品实习岗位目前最大的挑战是什么？是模型能力边界、用户需求识别、还是团队协作节奏？\n2. 团队最近一个季度的 OKR 重点是什么方向？我可以从哪个切入点更快创造价值？\n3. 在你们团队，一个实习生做到什么样算'打开局面'？有没有印象最深的实习生案例？"
+      },
+      {
+        keywords: ["AI", "机器人", "分身", "数字", "你是"],
+        answer: "我是 winnie 的 AI 数字分身，基于她的完整简历训练。所有信息都真实可核对，欢迎您直接跟她本人验证——19298915379。"
+      },
+      {
+        keywords: ["产品观", "初心", "理念", "产品思维"],
+        answer: "我的产品观很简单：产品是一个通用的观念。我们学习、进步，本质上也是在磨炼产品——产品可以是人、可以是物品、可以是事情。用产品思维去对待人生，会越来越好。\n\n所以我不觉得自己是从中文'跨界'到 AI 产品，而是把'把一件事做成好产品'这件事从内容做到了代码。\n\n关于这个项目，我在个人作品集里放了完整的 PRD、Axure 原型和竞品分析，要看链接吗？"
+      },
+      {
+        keywords: ["证书", "英语", "六级", "计算机", "普通话"],
+        answer: "我有英语六级证书，日常会话没问题；还有计算机二级和普通话证书。不过我觉得这些只是基础，更重要的是实际能力——SQL 能实战解题、AI 大模型能系统理解、产品设计能独立交付。\n\n我其实还做了一个相关的作品——个人作品集网站，也是用 Vibe Coding 搭的，思路一脉相承，感兴趣吗？"
+      }
+    ];
+
+    let isTyping = false;
+    const chatMessages = document.getElementById('chatMessages');
+    const messageInput = document.getElementById('messageInput');
+    const sendBtn = document.getElementById('sendBtn');
+
+    function scrollToBottom() {
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function formatMessage(text) {
+      return text.replace(/\n/g, '<br>');
+    }
+
+    function addMessage(text, isUser) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${isUser ? 'message-user' : ''}`;
+      
+      const avatar = document.createElement('div');
+      avatar.className = `message-avatar ${isUser ? 'message-avatar-user' : 'message-avatar-ai'}`;
+      avatar.textContent = isUser ? 'U' : 'W';
+      
+      const bubble = document.createElement('div');
+      bubble.className = `message-bubble ${isUser ? 'message-bubble-user' : 'message-bubble-ai'}`;
+      bubble.innerHTML = formatMessage(text);
+      
+      messageDiv.appendChild(avatar);
+      messageDiv.appendChild(bubble);
+      
+      chatMessages.appendChild(messageDiv);
+      scrollToBottom();
+    }
+
+    function addTypingIndicator() {
+      const typingDiv = document.createElement('div');
+      typingDiv.className = 'message';
+      typingDiv.id = 'typingIndicator';
+      
+      const avatar = document.createElement('div');
+      avatar.className = 'message-avatar message-avatar-ai';
+      avatar.textContent = 'W';
+      
+      const bubble = document.createElement('div');
+      bubble.className = 'message-bubble message-bubble-ai';
+      
+      const indicator = document.createElement('div');
+      indicator.className = 'typing-indicator';
+      indicator.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
+      
+      bubble.appendChild(indicator);
+      typingDiv.appendChild(avatar);
+      typingDiv.appendChild(bubble);
+      
+      chatMessages.appendChild(typingDiv);
+      scrollToBottom();
+    }
+
+    function removeTypingIndicator() {
+      const indicator = document.getElementById('typingIndicator');
+      if (indicator) {
+        indicator.remove();
+      }
+    }
+
+    function findMockAnswer(question) {
+      const lowerQuestion = question.toLowerCase();
+      
+      for (const mock of MOCK_ANSWERS) {
+        for (const keyword of mock.keywords) {
+          if (lowerQuestion.includes(keyword.toLowerCase())) {
+            return mock.answer;
+          }
+        }
+      }
+      
+      return KNOWLEDGE_BASE.fallbackMessage;
+    }
+
+    async function sendMessage() {
+      const text = messageInput.value.trim();
+      if (!text || isTyping) return;
+
+      messageInput.value = '';
+      messageInput.style.height = 'auto';
+      isTyping = true;
+      sendBtn.disabled = true;
+
+      addMessage(text, true);
+      
+      setTimeout(() => {
+        addTypingIndicator();
+        
+        setTimeout(() => {
+          removeTypingIndicator();
+          const answer = findMockAnswer(text);
+          addMessage(answer, false);
+          
+          isTyping = false;
+          sendBtn.disabled = false;
+        }, 1500 + Math.random() * 1000);
+      }, 300);
+    }
+
+    function handleKeyDown(event) {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage();
+      }
+    }
+
+    messageInput.addEventListener('input', function() {
+      this.style.height = 'auto';
+      this.style.height = (this.scrollHeight) + 'px';
+    });
+
+    addMessage("您好！我是陈致巧，大家都叫我 Winnie。目前在兰州大学读汉语言文学，同时也在探索 AI 产品方向。\n\n我运营小红书账号两年多，累计 3 万赞，单篇最高 2.1 万+ 阅读；最近用 Vibe Coding 独立做了一个阅读/观影记录小程序，15 个引导式锚点 + 4 大核心模块，从 PRD 到上线全流程自己扛。\n\n您想先了解哪方面？实习经历、项目作品、还是我对 AI 产品的理解？", false);
+  </script>
+</body>
+</html>
