@@ -620,7 +620,6 @@
   const KNOWLEDGE_BASE = {};
 
   // ---------- 1. 自我介绍 ----------
-  // 修复：syns 中明确加入“自我介绍”以匹配按钮
   KNOWLEDGE_BASE.self_intro = {
     core: "自我介绍",
     syns: ["自我介绍", "介绍自己", "说说你", "简单自我介绍", "你是谁", "你好", "hi", "hello", "您好", "讲讲你自己", "个人介绍", "你叫winnie是吗", "做个自我介绍", "winnie"],
@@ -1087,7 +1086,6 @@
   // ================================================================
 
   const SYNS_MAP = {
-    // 修复：在 self_intro 中明确加入“自我介绍”
     self_intro: ["自我介绍", "介绍自己", "说说你", "简单自我介绍", "你是谁", "你好", "hi", "hello", "您好", "讲讲你自己", "个人介绍", "你叫winnie是吗", "做个自我介绍", "winnie"],
     education: ["学校", "专业", "大学", "汉语言", "兰州", "中文", "非科班", "不对口", "科班", "读书", "哪个学校", "学什么", "学历"],
     taifu: ["泰瓴未来", "泰瓴", "增长策略", "AI评测", "EEAT", "7维度", "思维链", "第一段实习", "策略增长", "分层架构", "CTA", "品牌故事", "权限分层", "转化路径", "按钮设计"],
@@ -1120,20 +1118,18 @@
     reply_time: ["她一般什么时候回消息", "什么时候回消息", "一般多久回", "回复快吗"]
   };
 
-  // 构建快捷按钮映射
+  // 快捷按钮映射
   const QUICK_REPLY_MAP = {};
-  // 手动填充，确保“自我介绍”直接指向 self_intro
   QUICK_REPLY_MAP['自我介绍'] = 'self_intro';
   QUICK_REPLY_MAP['实习经历'] = 'taifu';
   QUICK_REPLY_MAP['项目作品'] = 'output_first';
   QUICK_REPLY_MAP['AI 产品理解'] = 'ai_understanding';
-  // 其余映射通过循环自动补充
+  // 自动补充
   for (const key in KNOWLEDGE_BASE) {
     const entry = KNOWLEDGE_BASE[key];
     if (entry.quickReplies) {
       for (const btn of entry.quickReplies) {
         if (!QUICK_REPLY_MAP[btn]) {
-          // 尝试匹配
           for (const k2 in KNOWLEDGE_BASE) {
             const e2 = KNOWLEDGE_BASE[k2];
             if (e2.core && (btn.includes(e2.core) || e2.core.includes(btn))) {
@@ -1145,7 +1141,6 @@
       }
     }
   }
-  // 手动补全常用按钮映射
   const extraMap = {
     '聊聊实习经历': 'taifu',
     '你做过什么项目': 'output_first',
@@ -1415,8 +1410,14 @@
     let entry = null;
     let quickReplies = [];
 
+    // ===== 硬编码：直接处理“自我介绍” =====
+    if (text === '自我介绍') {
+      entry = KNOWLEDGE_BASE.self_intro;
+      quickReplies = entry.quickReplies || [];
+    }
+
     // 直接匹配按钮
-    if (QUICK_REPLY_MAP[text]) {
+    if (!entry && QUICK_REPLY_MAP[text]) {
       const found = findKnowledgeBaseEntry(QUICK_REPLY_MAP[text]);
       if (found) {
         entry = found.entry;
@@ -1464,7 +1465,6 @@
   //  初始化
   // ================================================================
 
-  const welcomeEntry = KNOWLEDGE_BASE.self_intro;
   addMessage(
     `👋 你好！我是 Winnie 的 AI 面试分身。
 
