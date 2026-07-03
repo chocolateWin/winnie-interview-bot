@@ -31,7 +31,6 @@
       }
     }
 
-    /* ===== 侧边栏 ===== */
     .sidebar {
       width: 100%;
       max-width: 320px;
@@ -213,7 +212,6 @@
       border-top: 1px solid #f0f2f5;
     }
 
-    /* ===== 聊天区域 ===== */
     .chat-area {
       flex: 1;
       display: flex;
@@ -277,7 +275,6 @@
       50% { opacity: 0.5; }
     }
 
-    /* ===== 消息列表 ===== */
     .chat-messages {
       flex: 1;
       overflow-y: auto;
@@ -512,7 +509,6 @@
 
 <div class="container">
 
-  <!-- ===== 侧边栏 ===== -->
   <aside class="sidebar">
     <div class="profile-card">
       <div class="avatar">W</div>
@@ -571,7 +567,6 @@
     </div>
   </aside>
 
-  <!-- ===== 聊天区域 ===== -->
   <main class="chat-area">
 
     <header class="chat-header">
@@ -611,7 +606,7 @@
 
 <script>
   // ================================================================
-  //  完整知识库
+  //  知识库
   // ================================================================
 
   const KNOWLEDGE_BASE = {};
@@ -643,27 +638,53 @@
   我的产品观是：「产品是一个通用的观念。学习、进步，本质上也是在磨炼产品——产品可以是人、可以是物品、可以是事情。用产品思维去对待人生，会越来越好。」
 
   你想先聊哪段经历？实习、项目、还是我对 AI 的理解？`,
-    quickReplies: ['聊聊实习经历', '你做过什么项目', '为什么想做AI产品']
+    quickReplies: ['聊聊实习经历', '聊聊项目作品', '聊聊AI理解']
   };
 
-  // ---------- 2. 教育背景 ----------
-  KNOWLEDGE_BASE.education = {
-    core: "教育背景",
-    syns: ["学校", "专业", "大学", "汉语言", "兰州", "中文", "非科班", "不对口", "科班", "读书", "哪个学校", "学什么", "学历"],
-    answer: `我在兰州大学读汉语言文学，全日制本科，2028 年 6 月毕业。
+  // ---------- 2. 实习总览 ----------
+  KNOWLEDGE_BASE.internship_overview = {
+    core: "实习经历总览",
+    syns: ["实习经历总览", "实习经历", "几段实习", "做过哪些实习", "你的实习", "说说实习", "全部实习"],
+    answer: `我一共有四段实习经历，每段给我的收获都不一样：
 
-  很多人会觉得文科生做产品经理有壁垒，但我觉得恰恰相反——
-  汉语言训练的是文本理解和精准表达，写 PRD 的时候能把需求讲清楚、讲明白，这个能力其实很关键。
+  【泰瓴未来 · 策略增长实习生】（2025.12 - 2026.03）
+  这段实习对我影响最大。Leader 让我独立负责产品网页的分层信息架构、品牌故事、CTA 按钮设计，我第一次真正体会到「产品的每一个像素都是决策」。同时用 EEAT 框架 + 思维链 Prompt 做 AI 评测和调优，形成了「上游治理」的产品方法论。
 
-  而且文学本质上就是在理解人、理解情感，做产品也一样，要共情用户。
+  【去哪儿旅行 · 小红书运营实习生】（2025.07 - 2025.09）
+  独立监控 8 个账号日度数据、主导 20+ 人群运营。虽然是运营 title，但做的全是偏产品的事——数据驱动决策、用户画像、内容策略。
 
-  当然我也知道自己缺技术背景，所以课余自己补了很多：SQL 自学刷题、Axure 看课程上手画原型、大模型课程系统性学 RAG 和微调的原理、用 Vibe Coding 独立做小程序和作品集网站。
+  【网易有道 · 小红书内容运营实习生】（2024.11 - 2025.01）
+  高中学习领域日更，靠内容质量和封面创意通过入职笔试。锻炼了「高压下持续输出」的能力。
 
-  我觉得专业只是起点，关键是你愿意走多远。`,
-    quickReplies: ['你自学的技能有哪些', '做产品有什么优势', '聊聊你的项目']
+  【广州佰司特 · 招聘岗实习】（2024.10 - 2024.11）
+  从候选人视角切到了招聘方视角——知道 HR 是怎么看简历的。飞书日报复盘的习惯也是在这养成的。
+
+  你想深入了解哪一段？`,
+    quickReplies: ['泰瓴未来实习', '去哪儿实习', '网易有道实习', '佰司特实习']
   };
 
-  // ---------- 3. 泰瓴未来实习 ----------
+  // ---------- 3. 项目总览 ----------
+  KNOWLEDGE_BASE.projects_overview = {
+    core: "项目作品总览",
+    syns: ["项目作品", "做过什么项目", "有什么作品", "你的项目", "代表作", "项目总览", "全部项目"],
+    answer: `我有三个核心项目：
+
+  【输出第一 · 阅读/观影记录小程序】（2026.04 - 2026.05）
+  用 Vibe Coding 与 TRAE 协作，独立完成覆盖 4 大核心模块、15 个引导式锚点的完整小程序，从需求到上线全流程主导。核心解决了「用户面对空白输入框不知道怎么表达」的问题。
+  👉 https://chocolatewin.github.io/PM-Portfolio/
+
+  【个人作品集网站】（2026.06）
+  用 Vibe Coding 独立搭建，集中展示 PRD、竞品分析报告、Axure 原型、业务流程图。站内所有 p5.js 动效都是我用 openprocessing 自己磨出来的。站在 HR 视角设计信息层级，降低信息获取成本。
+  👉 https://chocolatewin.github.io/my-website/
+
+  【Winnie AI 面试分身 Agent】（2026.06）
+  你正在对话的这个。纯前端开发，部署在 GitHub Pages。核心能力：多轮对话记忆、加权意图匹配、主动引导追问、分级兜底逻辑。
+
+  你对哪个项目最感兴趣？`,
+    quickReplies: ['聊聊小程序细节', '聊聊作品集网站', '聊聊Agent技术']
+  };
+
+  // ---------- 4. 泰瓴未来实习 ----------
   KNOWLEDGE_BASE.taifu = {
     core: "泰瓴未来实习",
     syns: ["泰瓴未来", "泰瓴", "增长策略", "AI评测", "EEAT", "7维度", "思维链", "第一段实习", "策略增长", "分层架构", "CTA", "品牌故事", "权限分层", "转化路径", "按钮设计"],
@@ -685,7 +706,7 @@
     quickReplies: ['具体怎么设计分层架构的', '你学到了什么', '还有其他实习吗']
   };
 
-  // ---------- 4. 去哪儿旅行实习 ----------
+  // ---------- 5. 去哪儿实习 ----------
   KNOWLEDGE_BASE.qunar = {
     core: "去哪儿实习",
     syns: ["去哪儿", "去哪儿旅行", "数据监控", "用户运营", "市场调研", "第二段实习", "小红书运营"],
@@ -697,10 +718,10 @@
   市场调研：抓取华东区域选题流量数据，交叉验证 App 榜单、位置筛选、搜索趋势，输出选题决策
 
   这段经历让我对数据敏感度有了很大的提升，也知道了怎么通过数据发现问题、用数据说服别人。`,
-    quickReplies: ['具体怎么分析数据的', '遇到最大的挑战', '还有什么实习']
+    quickReplies: ['具体怎么分析数据的', '遇到最大的挑战', '还有其他实习吗']
   };
 
-  // ---------- 5. 网易有道实习 ----------
+  // ---------- 6. 网易有道实习 ----------
   KNOWLEDGE_BASE.wangyi = {
     core: "网易有道实习",
     syns: ["网易", "有道", "网易有道", "第三段实习", "高中学习", "内容运营"],
@@ -710,10 +731,10 @@
   日常工作是日更 1 篇高质量图文笔记，严格按 SOP 执行内容创作和发布流程。
 
   这段实习时间不长，但让我对「内容产品的标准化生产」有了实操经验，也验证了我在内容选题和文案表达上的能力。`,
-    quickReplies: ['那你还有其他实习吗', '聊聊你的项目', '你最喜欢哪段实习']
+    quickReplies: ['还有其他实习吗', '聊聊项目作品', '你最喜欢哪段实习']
   };
 
-  // ---------- 6. 佰司特招聘实习 ----------
+  // ---------- 7. 佰司特实习 ----------
   KNOWLEDGE_BASE.best = {
     core: "佰司特实习",
     syns: ["佰司特", "招聘", "人才画像", "寻访", "猎头", "第四段实习", "广州佰司特"],
@@ -723,10 +744,10 @@
   这段实习最大的收获有两个：
   第一，让我从「候选人视角」切到了「招聘方视角」——我知道 HR 是怎么看简历的、什么内容会被筛掉、什么内容会被留下来。这对现在写简历和准备面试帮助很大。
   第二，我养成了每天写飞书日报的习惯，坚持复盘，形成「执行→反思→改进」的工作闭环。这个习惯一直延续到现在，做项目、做产品都在用。`,
-    quickReplies: ['你最喜欢哪段实习', '聊聊你的项目', '做产品有什么优势']
+    quickReplies: ['你最喜欢哪段实习', '聊聊项目作品', '做产品有什么优势']
   };
 
-  // ---------- 7. 小红书个人账号 ----------
+  // ---------- 8. 小红书账号 ----------
   KNOWLEDGE_BASE.xhs = {
     core: "小红书账号",
     syns: ["小红书", "运营", "内容", "账号", "赞", "阅读", "爆款", "笔记", "创作者", "3万赞"],
@@ -739,13 +760,13 @@
   我也通过评论区互动和私信收集了很多用户反馈，然后不断调整选题方向，形成了「发布→数据→迭代」的闭环。
 
   这跟做产品逻辑一模一样。`,
-    quickReplies: ['你是怎么找到选题方向的', '遇到过瓶颈吗', '聊聊你的小程序项目']
+    quickReplies: ['你是怎么找到选题方向的', '遇到过瓶颈吗', '聊聊小程序细节']
   };
 
-  // ---------- 8. 输出第一小程序 ----------
+  // ---------- 9. 小程序 ----------
   KNOWLEDGE_BASE.output_first = {
     core: "输出第一小程序",
-    syns: ["输出第一", "小程序", "阅读记录", "观影记录", "项目", "作品", "代表作", "PRD", "Axure", "原型"],
+    syns: ["输出第一", "小程序", "阅读记录", "观影记录", "项目", "作品", "代表作", "PRD", "Axure", "原型", "小程序细节"],
     answer: `我做过一个叫「输出第一」的小程序，是一个阅读和观影记录工具。
 
   一句话说清结果：作为一个非科班的中文系学生，用 Vibe Coding 与 AI 编程工具 TRAE 协作，独立完成了一个覆盖 4 大核心模块、15 个引导式记录锚点的完整小程序，从需求到上线全流程主导。
@@ -760,13 +781,13 @@
   这个项目证明了我不是「只懂内容、不懂技术」的选手，也不是「技术为技术」的开发者。我是把产品思维当第一性原理、把 AI 当协作伙伴的人。
 
   作品链接：https://chocolatewin.github.io/PM-Portfolio/`,
-    quickReplies: ['你用AI怎么开发的', '功能设计有哪些考虑', '聊聊你的作品集网站']
+    quickReplies: ['你用AI怎么开发的', '功能设计有哪些考虑', '聊聊作品集网站']
   };
 
-  // ---------- 9. 作品集网站 ----------
+  // ---------- 10. 作品集网站 ----------
   KNOWLEDGE_BASE.portfolio_site = {
     core: "作品集网站",
-    syns: ["作品集", "个人网站", "my-website", "portfolio", "Vibe Coding", "openprocessing", "p5js", "动效", "p5.js", "PS", "photoshop"],
+    syns: ["作品集", "个人网站", "my-website", "portfolio", "Vibe Coding", "openprocessing", "p5js", "动效", "p5.js", "PS", "photoshop", "作品集网站"],
     answer: `我的作品集网站是 2026 年 6 月用 Vibe Coding 独立搭建的，这也是我第二次完整的 Vibe Coding 实践。
 
   链接：https://chocolatewin.github.io/my-website/
@@ -779,13 +800,13 @@
   我也熟练掌握 PS，在做原型和网站时都会用到。
 
   这个网站本身就是一个产品——我的产品观在它身上完整地跑了一遍。`,
-    quickReplies: ['打开你的作品集', '你还做过什么项目', '你用什么工具做动效']
+    quickReplies: ['打开看看', '聊聊小程序细节', '聊聊Agent技术']
   };
 
-  // ---------- 10. Agent 项目 ----------
+  // ---------- 11. Agent ----------
   KNOWLEDGE_BASE.agent = {
     core: "AI面试分身",
-    syns: ["agent", "面试分身", "AI agent", "智能体", "Winnie AI", "这个分身"],
+    syns: ["agent", "面试分身", "AI agent", "智能体", "Winnie AI", "这个分身", "Agent技术"],
     answer: `你现在正在对话的这个「Winnie AI 面试分身」就是我自己做的 Agent。
 
   我发现一个痛点：HR 看简历只能看到文字，没办法快速感知候选人的真实沟通风格和思维深度。
@@ -797,10 +818,10 @@
   核心能力：多轮对话记忆、加权意图匹配、主动引导追问、分级兜底逻辑。
 
   这个项目上线后，我自己也测试了很多轮，效果还不错。你正在体验的就是它！`,
-    quickReplies: ['技术难点是什么', '用户反馈怎么样', '聊聊你的作品集网站']
+    quickReplies: ['技术难点是什么', '用户反馈怎么样', '聊聊作品集网站']
   };
 
-  // ---------- 11. SQL ----------
+  // ---------- 12. SQL ----------
   KNOWLEDGE_BASE.sql = {
     core: "SQL技能",
     syns: ["sql", "数据分析", "数据工具", "会不会sql", "查询", "数据库"],
@@ -812,7 +833,7 @@
     quickReplies: ['你还会什么工具', '怎么学的', '具体怎么应用到工作中的']
   };
 
-  // ---------- 12. 产品设计工具 ----------
+  // ---------- 13. 产品工具 ----------
   KNOWLEDGE_BASE.design_tools = {
     core: "产品设计工具",
     syns: ["axure", "figma", "原型", "画原型", "产品工具", "XMind"],
@@ -824,10 +845,10 @@
   Figma 我也能上手，逻辑和 Axure 是通的，切换起来很快。
 
   我的方法论就是：先看，然后立刻上手做，不拖。`,
-    quickReplies: ['能看看你画的原型吗', '还有什么工具', '那你学习能力应该很强']
+    quickReplies: ['能看看你画的原型吗', '你还会什么工具', '那你学习能力应该很强']
   };
 
-  // ---------- 13. 学习方法 ----------
+  // ---------- 14. 学习方法 ----------
   KNOWLEDGE_BASE.learning = {
     core: "学习方法",
     syns: ["学习方式", "如何学习", "怎么学习", "最近在学什么", "自学", "快速学习"],
@@ -844,7 +865,7 @@
     quickReplies: ['你最近在学什么', '怎么保持学习动力', '推荐一个学习方法']
   };
 
-  // ---------- 14. 为什么做产品 ----------
+  // ---------- 15. 产品观 ----------
   KNOWLEDGE_BASE.why_pm = {
     core: "产品观",
     syns: ["为什么做产品", "产品经理吸引你", "产品观", "初心", "为什么选产品"],
@@ -859,7 +880,7 @@
     quickReplies: ['你觉得做产品最重要的能力是什么', '你有过什么失败经历', '对未来有什么规划']
   };
 
-  // ---------- 15. 优势 ----------
+  // ---------- 16. 优势 ----------
   KNOWLEDGE_BASE.strength = {
     core: "核心优势",
     syns: ["优势", "优点", "核心竞争力", "擅长", "亮点", "凭什么胜任"],
@@ -875,7 +896,7 @@
     quickReplies: ['举一个闭环的例子', '那你有缺点吗', '你是怎么学习的']
   };
 
-  // ---------- 16. 缺点 ----------
+  // ---------- 17. 缺点 ----------
   KNOWLEDGE_BASE.weakness = {
     core: "缺点不足",
     syns: ["缺点", "不足", "短板", "劣势", "需要改进"],
@@ -888,7 +909,7 @@
     quickReplies: ['你打算怎么补技术', '那你觉得自己能胜任吗', '你的学习方式是什么']
   };
 
-  // ---------- 17. 抗压 ----------
+  // ---------- 18. 抗压 ----------
   KNOWLEDGE_BASE.pressure = {
     core: "抗压能力",
     syns: ["抗压", "压力", "高强度", "加班", "996", "适应"],
@@ -902,7 +923,7 @@
     quickReplies: ['举一个具体的例子', '你是怎么调节的', '那你的执行力怎么样']
   };
 
-  // ---------- 18. 团队协作 ----------
+  // ---------- 19. 团队协作 ----------
   KNOWLEDGE_BASE.team = {
     core: "团队协作",
     syns: ["团队", "协作", "合作", "配合", "协同", "沟通", "跨部门"],
@@ -915,10 +936,10 @@
     quickReplies: ['遇到分歧怎么处理', '你怎么跟技术同学沟通', '你更喜欢独立工作还是团队']
   };
 
-  // ---------- 19. AI理解 ----------
+  // ---------- 20. AI理解 ----------
   KNOWLEDGE_BASE.ai_understanding = {
     core: "AI理解",
-    syns: ["AI", "大模型", "RAG", "微调", "Prompt", "思维链", "CoT", "幻觉", "Agent", "评测"],
+    syns: ["AI", "大模型", "RAG", "微调", "Prompt", "思维链", "CoT", "幻觉", "Agent", "评测", "AI产品理解"],
     answer: `我觉得 AI 目前最大的价值不是「替代人」，而是「提升人的效率」——把重复的事情交给机器，把创造性的部分留给人。
 
   我对 AI 的理解更多是从「应用落地」的角度出发：AI 能不能真正解决业务问题？能不能让用户的体验变得更好？
@@ -932,7 +953,7 @@
     quickReplies: ['你觉得AI会取代产品经理吗', '你用AI做过什么', '未来AI产品的发展方向']
   };
 
-  // ---------- 20. 反问 ----------
+  // ---------- 21. 反问 ----------
   KNOWLEDGE_BASE.ask_hr = {
     core: "反问面试官",
     syns: ["有什么问题", "反问", "想问", "了解团队", "OKR", "挑战", "成长", "你还有什么要问的吗"],
@@ -946,7 +967,7 @@
     quickReplies: ['好的了解了', '那你们团队氛围怎么样', '谢谢回答']
   };
 
-  // ---------- 21. 职业规划 ----------
+  // ---------- 22. 职业规划 ----------
   KNOWLEDGE_BASE.career_plan = {
     core: "职业规划",
     syns: ["未来规划", "以后想做什么", "长远计划", "5年规划", "为什么做AI产品", "求职动机"],
@@ -960,7 +981,7 @@
     quickReplies: ['那你为什么选AI方向', '你觉得这个岗位适合你吗', '你还有别的规划吗']
   };
 
-  // ---------- 22. 学生工作 ----------
+  // ---------- 23. 学生工作 ----------
   KNOWLEDGE_BASE.student_work = {
     core: "学生工作",
     syns: ["学生工作", "社团", "项目审核部", "优秀学生干事", "到梦空间", "青年发展中心"],
@@ -973,7 +994,7 @@
     quickReplies: ['具体做什么的', '有什么收获', '你怎么平衡学习和工作']
   };
 
-  // ---------- 23. 英语 ----------
+  // ---------- 24. 英语 ----------
   KNOWLEDGE_BASE.english = {
     core: "英语能力",
     syns: ["英语", "六级", "English", "英文", "阅读"],
@@ -984,7 +1005,7 @@
     quickReplies: ['你平时怎么看英文资料', '英语对产品经理重要吗', '还有什么想说的']
   };
 
-  // ---------- 24. 计算机二级 ----------
+  // ---------- 25. 计算机二级 ----------
   KNOWLEDGE_BASE.computer_level2 = {
     core: "计算机二级",
     syns: ["计算机二级", "二级", "计算机等级", "office"],
@@ -992,10 +1013,10 @@
   平时写文档、做表格、整理数据，用 Word、Excel 这些都很顺手。
 
   我觉得产品经理不一定需要会写代码，但基本的工具素养还是要有——能把想法清晰地表达出来、能自己拉数据做分析，这些都是基础能力。`,
-    quickReplies: ['你还用什么工具', '你还会哪些技能', '怎么学的二级']
+    quickReplies: ['你还会什么工具', '你还会哪些技能', '怎么学的二级']
   };
 
-  // ---------- 25. 看网文 ----------
+  // ---------- 26. 看网文 ----------
   KNOWLEDGE_BASE.novel = {
     core: "看网文",
     syns: ["网文", "晋江", "小说", "阅读习惯", "番茄小说"],
@@ -1006,7 +1027,7 @@
     quickReplies: ['你最喜欢哪个平台', '那你怎么看晋江这个产品', '你喜欢看什么类型']
   };
 
-  // ---------- 26. 分层架构设计 ----------
+  // ---------- 27. 分层架构 ----------
   KNOWLEDGE_BASE.arch_design = {
     core: "分层架构设计",
     syns: ["分层架构", "信息架构", "CTA", "按钮设计", "品牌故事", "转化路径", "下载转化", "权限分层", "怎么设计分层架构"],
@@ -1020,10 +1041,41 @@
   3. 权限分层机制——不同用户看到不同的内容入口，降低认知负担，提升转化效率。
 
   这段经历让我意识到：产品设计不是在画界面，而是在设计用户的决策路径——你希望用户在想什么的时候看到什么、做什么。`,
-    quickReplies: ['你学到了什么', '聊聊你的项目', '说说你的产品观']
+    quickReplies: ['你学到了什么', '聊聊项目作品', '说说你的产品观']
   };
 
-  // ---------- 27. 兜底（软）----------
+  // ---------- 28. 具体怎么分析数据 ----------
+  KNOWLEDGE_BASE.data_analysis_detail = {
+    core: "数据分析细节",
+    syns: ["具体怎么分析数据的", "数据分析细节"],
+    answer: `在去哪儿实习时，我每天要监控 8 个账号的日度数据，核心指标包括：曝光、点击、互动率、转化率、粉丝增长、内容留存。
+
+  我的分析方法是：
+  第一步，看整体趋势——今天的数据比昨天涨了还是跌了？
+  第二步，找异常——哪个账号、哪个指标偏离正常范围？
+  第三步，归因——是内容选题变了？还是发布时间调整了？还是外部因素？
+  第四步，出结论——给团队建议：这个方向可以继续，那个方向需要调整。
+
+  这套方法后来也迁移到了我做小程序和作品集网站的数据复盘里。`,
+    quickReplies: ['遇到最大的挑战', '聊聊项目作品', '你学到了什么']
+  };
+
+  // ---------- 29. 遇到最大挑战 ----------
+  KNOWLEDGE_BASE.biggest_challenge = {
+    core: "最大挑战",
+    syns: ["遇到最大的挑战", "最大挑战", "最难的", "困难"],
+    answer: `我觉得最大的挑战是在泰瓴未来实习时，AI 产出与决策人真实背景匹配度不足的问题。
+
+  当时 AI 生成的开发信内容质量时好时坏，后端修改率很高。
+  我一开始以为问题出在模型本身，后来深度分析才发现——根源是 Prompt 设计不够精细，没有告诉 AI「决策人是谁、痛点是什么、我们希望什么样的语气」。
+
+  于是我配合团队用思维链重新设计了 Prompt 框架，把上下文补充完整，把约束条件前置。效果改善很明显。
+
+  这件事教会我：很多问题表面看是技术问题，其实是「需求定义不清」的问题——好产品是设计出来的，不是修出来的。这也是我「上游治理」方法论的起点。`,
+    quickReplies: ['你是怎么解决的', '你学到了什么', '聊聊项目作品']
+  };
+
+  // ---------- 30. 兜底（软）----------
   KNOWLEDGE_BASE.fallbackWeak = {
     core: "兜底软",
     syns: [],
@@ -1040,7 +1092,7 @@
     quickReplies: ['好的我去看看', '那先聊聊别的', '她一般什么时候回消息']
   };
 
-  // ---------- 28. 兜底（硬）----------
+  // ---------- 31. 兜底（硬）----------
   KNOWLEDGE_BASE.fallbackHard = {
     core: "兜底硬",
     syns: [],
@@ -1056,7 +1108,7 @@
     quickReplies: ['好的我去看看', '那先聊聊别的', '她一般什么时候回消息']
   };
 
-  // ---------- 29. 那先聊聊别的 ----------
+  // ---------- 32. 那先聊聊别的 ----------
   KNOWLEDGE_BASE.chat_other = {
     core: "换个话题",
     syns: ["那先聊聊别的", "先聊聊别的", "聊聊别的", "换一个话题", "换个方向"],
@@ -1071,7 +1123,7 @@
     quickReplies: ['聊聊实习经历', '聊聊项目作品', '聊聊技能爱好', '聊聊AI理解']
   };
 
-  // ---------- 30. 她一般什么时候回消息 ----------
+  // ---------- 33. 她一般什么时候回消息 ----------
   KNOWLEDGE_BASE.reply_time = {
     core: "回复时间",
     syns: ["她一般什么时候回消息", "什么时候回消息", "一般多久回", "回复快吗"],
@@ -1085,21 +1137,61 @@
     quickReplies: ['好的我去看看', '那先聊聊别的', '还有什么想说的']
   };
 
+  // ---------- 34. 你学到了什么 ----------
+  KNOWLEDGE_BASE.learned = {
+    core: "你学到了什么",
+    syns: ["你学到了什么", "学到了什么", "收获", "成长", "从实习中学到了什么"],
+    answer: `我觉得每个阶段学到的东西不太一样：
+
+  在泰瓴未来，我学到了「上游治理」——在源头把规则定好，减少下游返工。好产品是设计出来的，不是修出来的。
+
+  在去哪儿，我学到了「数据驱动」——用数据发现问题、用数据说服别人，比拍脑袋决策靠谱得多。
+
+  在网易有道，我学到了「高压输出」——日更 1 篇内容，再忙也要保证质量，执行力是在这练出来的。
+
+  在佰司特，我学到了「换位思考」——知道 HR 怎么看简历，反过来优化自己的简历和面试表达。
+
+  而做小程序和 Agent，我学到了「产品闭环」——从想法到上线，每一步都要自己走一遍，才能真正理解产品的全貌。`,
+    quickReplies: ['聊聊项目作品', '聊聊实习经历', '说说你的产品观']
+  };
+
+  // ---------- 35. 具体怎么优化Prompt ----------
+  KNOWLEDGE_BASE.prompt_detail = {
+    core: "Prompt优化细节",
+    syns: ["具体怎么优化Prompt的", "优化Prompt", "Prompt怎么调", "思维链怎么用"],
+    answer: `在泰瓴未来，我优化 Prompt 的核心方法是「思维链 + 上下文注入」。
+
+  具体分三步：
+
+  第一步：拆解诉求
+  先问自己：AI 要完成的任务本质是什么？不是「写一封开发信」，而是「让决策人觉得这个方案值得了解」。任务目标清晰了，Prompt 的方向才不会偏。
+
+  第二步：补充上下文
+  把决策人的背景信息（行业、职位、可能痛点）、业务场景、期望的语气风格，全部注入 Prompt。AI 的信息越充分，产出越精准。
+
+  第三步：用苏格拉底法引导
+  在 Prompt 里加入反问式引导，比如「你写的这个痛点，决策人真的在乎吗？」「这个说法会不会太像推销？」——让 AI 自己审视输出，而不是直接生成。
+
+  这套方法的核心是：把 AI 当协作伙伴，而不是工具。你给它越多约束和引导，它产出越靠谱。`,
+    quickReplies: ['你学到了什么', '聊聊项目作品', '说说你的产品观']
+  };
+
   // ================================================================
   //  对话引擎
   // ================================================================
 
   const SYNS_MAP = {
     self_intro: ["自我介绍", "介绍自己", "说说你", "简单自我介绍", "你是谁", "你好", "hi", "hello", "您好", "讲讲你自己", "个人介绍", "你叫winnie是吗", "做个自我介绍", "winnie"],
-    education: ["学校", "专业", "大学", "汉语言", "兰州", "中文", "非科班", "不对口", "科班", "读书", "哪个学校", "学什么", "学历"],
+    internship_overview: ["实习经历", "几段实习", "做过哪些实习", "你的实习", "说说实习", "全部实习", "实习经历总览"],
+    projects_overview: ["项目作品", "做过什么项目", "有什么作品", "你的项目", "代表作", "项目总览", "全部项目"],
     taifu: ["泰瓴未来", "泰瓴", "增长策略", "AI评测", "EEAT", "7维度", "思维链", "第一段实习", "策略增长", "分层架构", "CTA", "品牌故事", "权限分层", "转化路径", "按钮设计"],
     qunar: ["去哪儿", "去哪儿旅行", "数据监控", "用户运营", "市场调研", "第二段实习", "小红书运营"],
     wangyi: ["网易", "有道", "网易有道", "第三段实习", "高中学习", "内容运营"],
     best: ["佰司特", "招聘", "人才画像", "寻访", "猎头", "第四段实习", "广州佰司特"],
     xhs: ["小红书", "运营", "内容", "账号", "赞", "阅读", "爆款", "笔记", "创作者", "3万赞"],
-    output_first: ["输出第一", "小程序", "阅读记录", "观影记录", "项目", "作品", "代表作", "PRD", "Axure", "原型"],
-    portfolio_site: ["作品集", "个人网站", "my-website", "portfolio", "Vibe Coding", "openprocessing", "p5js", "动效", "p5.js", "PS", "photoshop"],
-    agent: ["agent", "面试分身", "AI agent", "智能体", "Winnie AI", "这个分身"],
+    output_first: ["输出第一", "小程序", "阅读记录", "观影记录", "项目", "作品", "代表作", "PRD", "Axure", "原型", "小程序细节"],
+    portfolio_site: ["作品集", "个人网站", "my-website", "portfolio", "Vibe Coding", "openprocessing", "p5js", "动效", "p5.js", "PS", "photoshop", "作品集网站"],
+    agent: ["agent", "面试分身", "AI agent", "智能体", "Winnie AI", "这个分身", "Agent技术"],
     sql: ["sql", "数据分析", "数据工具", "会不会sql", "查询", "数据库"],
     design_tools: ["axure", "figma", "原型", "画原型", "产品工具", "XMind"],
     learning: ["学习方式", "如何学习", "怎么学习", "最近在学什么", "自学", "快速学习"],
@@ -1108,7 +1200,7 @@
     weakness: ["缺点", "不足", "短板", "劣势", "需要改进"],
     pressure: ["抗压", "压力", "高强度", "加班", "996", "适应"],
     team: ["团队", "协作", "合作", "配合", "协同", "沟通", "跨部门"],
-    ai_understanding: ["AI", "大模型", "RAG", "微调", "Prompt", "思维链", "CoT", "幻觉", "Agent", "评测"],
+    ai_understanding: ["AI", "大模型", "RAG", "微调", "Prompt", "思维链", "CoT", "幻觉", "Agent", "评测", "AI产品理解"],
     ask_hr: ["有什么问题", "反问", "想问", "了解团队", "OKR", "挑战", "成长", "你还有什么要问的吗"],
     career_plan: ["未来规划", "以后想做什么", "长远计划", "5年规划", "为什么做AI产品", "求职动机"],
     student_work: ["学生工作", "社团", "项目审核部", "优秀学生干事", "到梦空间", "青年发展中心"],
@@ -1116,141 +1208,151 @@
     computer_level2: ["计算机二级", "二级", "计算机等级", "office"],
     novel: ["网文", "晋江", "小说", "阅读习惯", "番茄小说"],
     arch_design: ["分层架构", "信息架构", "CTA", "按钮设计", "品牌故事", "转化路径", "下载转化", "权限分层", "怎么设计分层架构"],
+    data_analysis_detail: ["具体怎么分析数据的", "数据分析细节"],
+    biggest_challenge: ["遇到最大的挑战", "最大挑战", "最难的", "困难"],
+    learned: ["你学到了什么", "学到了什么", "收获", "成长", "从实习中学到了什么"],
+    prompt_detail: ["具体怎么优化Prompt的", "优化Prompt", "Prompt怎么调", "思维链怎么用"],
     fallbackWeak: [],
     fallbackHard: [],
     chat_other: ["那先聊聊别的", "先聊聊别的", "聊聊别的", "换一个话题", "换个方向"],
     reply_time: ["她一般什么时候回消息", "什么时候回消息", "一般多久回", "回复快吗"]
   };
 
-  // 快捷按钮映射
+  // ================================================================
+  //  快捷按钮映射表 —— 全量重构，确保每个按钮唯一指向
+  // ================================================================
+
   const QUICK_REPLY_MAP = {};
+
+  // ---- 顶层按钮 ----
   QUICK_REPLY_MAP['自我介绍'] = 'self_intro';
-  QUICK_REPLY_MAP['实习经历'] = 'taifu';
-  QUICK_REPLY_MAP['项目作品'] = 'output_first';
+  QUICK_REPLY_MAP['实习经历'] = 'internship_overview';
+  QUICK_REPLY_MAP['项目作品'] = 'projects_overview';
   QUICK_REPLY_MAP['AI 产品理解'] = 'ai_understanding';
 
-  for (const key in KNOWLEDGE_BASE) {
-    const entry = KNOWLEDGE_BASE[key];
-    if (entry.quickReplies) {
-      for (const btn of entry.quickReplies) {
-        if (!QUICK_REPLY_MAP[btn]) {
-          for (const k2 in KNOWLEDGE_BASE) {
-            const e2 = KNOWLEDGE_BASE[k2];
-            if (e2.core && (btn.includes(e2.core) || e2.core.includes(btn))) {
-              QUICK_REPLY_MAP[btn] = k2;
-              break;
-            }
-          }
-        }
-      }
-    }
-  }
+  // ---- 实习相关 ----
+  QUICK_REPLY_MAP['聊聊实习经历'] = 'internship_overview';
+  QUICK_REPLY_MAP['泰瓴未来实习'] = 'taifu';
+  QUICK_REPLY_MAP['去哪儿实习'] = 'qunar';
+  QUICK_REPLY_MAP['网易有道实习'] = 'wangyi';
+  QUICK_REPLY_MAP['佰司特实习'] = 'best';
+  QUICK_REPLY_MAP['你最喜欢哪段实习'] = 'taifu';
+  QUICK_REPLY_MAP['还有其他实习吗'] = 'internship_overview';
+  QUICK_REPLY_MAP['再来一段实习'] = 'qunar';
 
-  const extraMap = {
-    '聊聊实习经历': 'taifu',
-    '你做过什么项目': 'output_first',
-    '为什么想做AI产品': 'career_plan',
-    '你自学的技能有哪些': 'sql',
-    '做产品有什么优势': 'why_pm',
-    '聊聊你的项目': 'output_first',
-    '聊聊你的小程序项目': 'output_first',
-    '聊聊你的作品集网站': 'portfolio_site',
-    '具体怎么优化Prompt的': 'taifu',
-    '你学到了什么': 'taifu',
-    '还有其他实习吗': 'qunar',
-    '你最喜欢哪段实习': 'taifu',
-    '具体怎么分析数据的': 'qunar',
-    '遇到最大的挑战': 'pressure',
-    '你有什么收获': 'strength',
-    '你是怎么找到选题方向的': 'xhs',
-    '遇到过瓶颈吗': 'weakness',
-    '你觉得用户运营最难的是什么': 'team',
-    '你用AI怎么开发的': 'agent',
-    '功能设计有哪些考虑': 'output_first',
-    '数据表现怎么样': 'xhs',
-    '技术难点是什么': 'agent',
-    '用户反馈怎么样': 'portfolio_site',
-    '接下来打算怎么优化': 'career_plan',
-    '你还会什么工具': 'design_tools',
-    '怎么学的': 'learning',
-    '具体怎么应用到工作中的': 'taifu',
-    '能看看你画的原型吗': 'portfolio_site',
-    '还有什么工具': 'design_tools',
-    '那你学习能力应该很强': 'learning',
-    '你觉得做产品最重要的能力是什么': 'why_pm',
-    '你有过什么失败经历': 'weakness',
-    '对未来有什么规划': 'career_plan',
-    '举一个闭环的例子': 'strength',
-    '那你有缺点吗': 'weakness',
-    '你是怎么学习的': 'learning',
-    '你打算怎么补技术': 'weakness',
-    '那你觉得自己能胜任吗': 'strength',
-    '你的学习方式是什么': 'learning',
-    '你最近在学什么': 'learning',
-    '最近学什么': 'learning',
-    '怎么保持学习动力': 'learning',
-    '推荐一个学习方法': 'learning',
-    '举一个具体的例子': 'pressure',
-    '你是怎么调节的': 'pressure',
-    '那你的执行力怎么样': 'strength',
-    '遇到分歧怎么处理': 'team',
-    '你怎么跟技术同学沟通': 'team',
-    '你更喜欢独立工作还是团队': 'team',
-    '你觉得AI会取代产品经理吗': 'ai_understanding',
-    '你用AI做过什么': 'agent',
-    '未来AI产品的发展方向': 'ai_understanding',
-    '你还会继续学吗': 'learning',
-    '那你觉得懂技术重要吗': 'why_pm',
-    '你做了哪些项目': 'output_first',
-    '哪个项目最满意': 'output_first',
-    '还有什么想展示的吗': 'portfolio_site',
-    '好的了解了': 'welcome',
-    '那你们团队氛围怎么样': 'team',
-    '谢谢回答': 'welcome',
-    '那你为什么选AI方向': 'career_plan',
-    '你觉得这个岗位适合你吗': 'strength',
-    '你还有别的规划吗': 'career_plan',
-    '具体做什么的': 'student_work',
-    '有什么收获': 'strength',
-    '你怎么平衡学习和工作': 'learning',
-    '举个例子': 'qunar',
-    '你用什么工具做数据分析': 'sql',
-    '数据重要还是直觉重要': 'qunar',
-    '你觉得AI产品最大的挑战是什么': 'ai_understanding',
-    '你最喜欢哪个AI产品': 'ai_understanding',
-    '你平时用什么AI工具': 'ai_understanding',
-    '你平时怎么看英文资料': 'english',
-    '英语对产品经理重要吗': 'english',
-    '还有什么想说的': 'welcome',
-    '你还用什么工具': 'design_tools',
-    '你还会哪些技能': 'sql',
-    '怎么学的二级': 'learning',
-    '你最喜欢哪个平台': 'novel',
-    '那你怎么看晋江这个产品': 'novel',
-    '你喜欢看什么类型': 'novel',
-    '那说说你的实习吧': 'taifu',
-    '你对AI产品怎么看': 'ai_understanding',
-    '你有什么项目经验': 'output_first',
-    '好的我去看看': 'welcome',
-    '那先聊聊别的': 'chat_other',
-    '她一般什么时候回消息': 'reply_time',
-    '先聊聊别的': 'chat_other',
-    '聊聊别的': 'chat_other',
-    '换一个话题': 'chat_other',
-    '换个方向': 'chat_other',
-    '聊聊技能爱好': 'design_tools',
-    '聊聊项目作品': 'output_first',
-    '聊聊AI理解': 'ai_understanding',
-    '打开你的作品集': 'portfolio_site',
-    '你用什么工具做动效': 'portfolio_site',
-    'p5js': 'portfolio_site',
-    'p5.js': 'portfolio_site',
-    'openprocessing': 'portfolio_site',
-    '具体怎么设计分层架构的': 'arch_design',
-    '怎么设计按钮的': 'arch_design',
-    '信息架构': 'arch_design'
-  };
-  Object.assign(QUICK_REPLY_MAP, extraMap);
+  // ---- 项目相关 ----
+  QUICK_REPLY_MAP['聊聊项目作品'] = 'projects_overview';
+  QUICK_REPLY_MAP['聊聊你的项目'] = 'projects_overview';
+  QUICK_REPLY_MAP['聊聊小程序细节'] = 'output_first';
+  QUICK_REPLY_MAP['聊聊作品集网站'] = 'portfolio_site';
+  QUICK_REPLY_MAP['聊聊Agent技术'] = 'agent';
+  QUICK_REPLY_MAP['打开看看'] = 'portfolio_site';
+  QUICK_REPLY_MAP['打开你的作品集'] = 'portfolio_site';
+  QUICK_REPLY_MAP['你用什么工具做动效'] = 'portfolio_site';
+  QUICK_REPLY_MAP['你还用过什么工具'] = 'design_tools';
+  QUICK_REPLY_MAP['你还会什么工具'] = 'design_tools';
+  QUICK_REPLY_MAP['你还做过什么项目'] = 'projects_overview';
+  QUICK_REPLY_MAP['哪个项目最满意'] = 'output_first';
+  QUICK_REPLY_MAP['项目'] = 'projects_overview';
+
+  // ---- AI理解 ----
+  QUICK_REPLY_MAP['聊聊AI理解'] = 'ai_understanding';
+  QUICK_REPLY_MAP['你对AI产品怎么看'] = 'ai_understanding';
+  QUICK_REPLY_MAP['你觉得AI会取代产品经理吗'] = 'ai_understanding';
+  QUICK_REPLY_MAP['你用AI做过什么'] = 'agent';
+  QUICK_REPLY_MAP['未来AI产品的发展方向'] = 'ai_understanding';
+
+  // ---- 技能/工具/学习 ----
+  QUICK_REPLY_MAP['聊聊技能爱好'] = 'design_tools';
+  QUICK_REPLY_MAP['你自学的技能有哪些'] = 'sql';
+  QUICK_REPLY_MAP['你还会哪些技能'] = 'sql';
+  QUICK_REPLY_MAP['怎么学的'] = 'learning';
+  QUICK_REPLY_MAP['怎么学的二级'] = 'learning';
+  QUICK_REPLY_MAP['你的学习方式是什么'] = 'learning';
+  QUICK_REPLY_MAP['你最近在学什么'] = 'learning';
+  QUICK_REPLY_MAP['最近学什么'] = 'learning';
+  QUICK_REPLY_MAP['怎么保持学习动力'] = 'learning';
+  QUICK_REPLY_MAP['推荐一个学习方法'] = 'learning';
+  QUICK_REPLY_MAP['那你学习能力应该很强'] = 'learning';
+  QUICK_REPLY_MAP['你平时怎么看英文资料'] = 'english';
+  QUICK_REPLY_MAP['你最喜欢哪个平台'] = 'novel';
+  QUICK_REPLY_MAP['那你怎么看晋江这个产品'] = 'novel';
+
+  // ---- 产品观/优势/缺点 ----
+  QUICK_REPLY_MAP['做产品有什么优势'] = 'why_pm';
+  QUICK_REPLY_MAP['为什么想做AI产品'] = 'why_pm';
+  QUICK_REPLY_MAP['产品观'] = 'why_pm';
+  QUICK_REPLY_MAP['你觉得做产品最重要的能力是什么'] = 'why_pm';
+  QUICK_REPLY_MAP['说说你的产品观'] = 'why_pm';
+  QUICK_REPLY_MAP['你的优势'] = 'strength';
+  QUICK_REPLY_MAP['核心竞争力'] = 'strength';
+  QUICK_REPLY_MAP['你有什么优势'] = 'strength';
+  QUICK_REPLY_MAP['那你有缺点吗'] = 'weakness';
+  QUICK_REPLY_MAP['缺点'] = 'weakness';
+
+  // ---- 深层追问 ----
+  QUICK_REPLY_MAP['具体怎么设计分层架构的'] = 'arch_design';
+  QUICK_REPLY_MAP['具体怎么分析数据的'] = 'data_analysis_detail';
+  QUICK_REPLY_MAP['遇到最大的挑战'] = 'biggest_challenge';
+  QUICK_REPLY_MAP['你学到了什么'] = 'learned';
+  QUICK_REPLY_MAP['具体怎么优化Prompt的'] = 'prompt_detail';
+  QUICK_REPLY_MAP['你用AI怎么开发的'] = 'agent';
+  QUICK_REPLY_MAP['功能设计有哪些考虑'] = 'output_first';
+  QUICK_REPLY_MAP['技术难点是什么'] = 'agent';
+  QUICK_REPLY_MAP['用户反馈怎么样'] = 'portfolio_site';
+  QUICK_REPLY_MAP['数据表现怎么样'] = 'data_analysis_detail';
+  QUICK_REPLY_MAP['你是怎么找到选题方向的'] = 'xhs';
+  QUICK_REPLY_MAP['遇到分歧怎么处理'] = 'team';
+  QUICK_REPLY_MAP['你怎么跟技术同学沟通'] = 'team';
+  QUICK_REPLY_MAP['你更喜欢独立工作还是团队'] = 'team';
+  QUICK_REPLY_MAP['举一个闭环的例子'] = 'strength';
+  QUICK_REPLY_MAP['举一个具体的例子'] = 'pressure';
+  QUICK_REPLY_MAP['你是怎么调节的'] = 'pressure';
+  QUICK_REPLY_MAP['那你的执行力怎么样'] = 'strength';
+  QUICK_REPLY_MAP['你打算怎么补技术'] = 'weakness';
+  QUICK_REPLY_MAP['那你觉得自己能胜任吗'] = 'strength';
+  QUICK_REPLY_MAP['对未来有什么规划'] = 'career_plan';
+  QUICK_REPLY_MAP['那你为什么选AI方向'] = 'career_plan';
+  QUICK_REPLY_MAP['你觉得这个岗位适合你吗'] = 'strength';
+  QUICK_REPLY_MAP['你还有别的规划吗'] = 'career_plan';
+  QUICK_REPLY_MAP['具体做什么的'] = 'student_work';
+  QUICK_REPLY_MAP['有什么收获'] = 'learned';
+  QUICK_REPLY_MAP['你怎么平衡学习和工作'] = 'learning';
+  QUICK_REPLY_MAP['英语对产品经理重要吗'] = 'english';
+  QUICK_REPLY_MAP['你最喜欢哪个平台'] = 'novel';
+  QUICK_REPLY_MAP['那你怎么看晋江这个产品'] = 'novel';
+  QUICK_REPLY_MAP['你喜欢看什么类型'] = 'novel';
+
+  // ---- 通用引导 ----
+  QUICK_REPLY_MAP['好的我去看看'] = 'portfolio_site';
+  QUICK_REPLY_MAP['那先聊聊别的'] = 'chat_other';
+  QUICK_REPLY_MAP['她一般什么时候回消息'] = 'reply_time';
+  QUICK_REPLY_MAP['还有什么想说的'] = 'self_intro';
+  QUICK_REPLY_MAP['谢谢回答'] = 'self_intro';
+  QUICK_REPLY_MAP['好的了解了'] = 'self_intro';
+
+  // ---- 技能/工具补充 ----
+  QUICK_REPLY_MAP['能看看你画的原型吗'] = 'portfolio_site';
+  QUICK_REPLY_MAP['还有什么工具'] = 'design_tools';
+  QUICK_REPLY_MAP['具体怎么应用到工作中的'] = 'taifu';
+  QUICK_REPLY_MAP['遇到瓶颈吗'] = 'weakness';
+  QUICK_REPLY_MAP['你觉得用户运营最难的是什么'] = 'team';
+
+  // ---- 防止遗漏 ----
+  QUICK_REPLY_MAP['你有过什么失败经历'] = 'weakness';
+  QUICK_REPLY_MAP['说说你的优势'] = 'strength';
+  QUICK_REPLY_MAP['你的亮点'] = 'strength';
+  QUICK_REPLY_MAP['你的收获'] = 'learned';
+
+  // ---- 补充缺失映射 ----
+  QUICK_REPLY_MAP['未来规划'] = 'career_plan';
+  QUICK_REPLY_MAP['职业规划'] = 'career_plan';
+  QUICK_REPLY_MAP['5年规划'] = 'career_plan';
+  QUICK_REPLY_MAP['求职动机'] = 'career_plan';
+
+  // ================================================================
+  //  查找函数
+  // ================================================================
 
   function findKnowledgeBaseEntry(key) {
     if (KNOWLEDGE_BASE[key]) return { entry: KNOWLEDGE_BASE[key], key: key };
@@ -1415,13 +1517,13 @@
     let entry = null;
     let quickReplies = [];
 
-    // ===== 硬编码：直接处理“自我介绍” =====
+    // 硬编码处理“自我介绍”
     if (text === '自我介绍') {
       entry = KNOWLEDGE_BASE.self_intro;
       quickReplies = entry.quickReplies || [];
     }
 
-    // 直接匹配按钮
+    // 直接匹配按钮映射
     if (!entry && QUICK_REPLY_MAP[text]) {
       const found = findKnowledgeBaseEntry(QUICK_REPLY_MAP[text]);
       if (found) {
